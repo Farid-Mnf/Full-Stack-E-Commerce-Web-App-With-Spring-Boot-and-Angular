@@ -1,4 +1,4 @@
-package com.farid.backend;
+package com.farid.backend.service;
 
 import com.farid.backend.entity.User;
 import com.farid.backend.repository.UserRepository;

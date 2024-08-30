@@ -1,6 +1,6 @@
 package com.farid.backend.rest;
 
-import com.farid.backend.UserService;
+import com.farid.backend.service.UserService;
 import com.farid.backend.entity.User;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
