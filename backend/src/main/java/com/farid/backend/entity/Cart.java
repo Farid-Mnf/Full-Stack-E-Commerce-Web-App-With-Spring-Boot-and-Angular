@@ -1,5 +1,6 @@
 package com.farid.backend.entity;
 
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,18 +15,13 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class Product {
+public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    private String name;
-    private String description;
-    private Double price;
-    private String imageUrl;
-    @ManyToMany(mappedBy = "products")
-    private Set<Cart> carts;
+    @OneToOne
+    private User user;
+    @ManyToMany
+    private Set<Product> products;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
-    private Category category;
 }
