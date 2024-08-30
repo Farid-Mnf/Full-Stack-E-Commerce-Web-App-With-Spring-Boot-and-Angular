@@ -1,5 +1,6 @@
 package com.farid.backend.service;
 
+import com.farid.backend.dto.ProductDTO;
 import com.farid.backend.entity.Product;
 import com.farid.backend.repository.ProductRepository;
 import lombok.AllArgsConstructor;
@@ -19,5 +20,17 @@ public class ProductService {
 
     public Product getProductById(UUID id) {
         return productRepository.findById(id).orElse(null);
+    }
+
+    public Product addProduct(ProductDTO productDTO) {
+        return productRepository.save(
+                Product.builder()
+                        .description(productDTO.getDescription())
+                        .price(productDTO.getPrice())
+                        .name(productDTO.getName())
+                        .imageUrl(productDTO.getImageUrl())
+                        .build()
+        );
+
     }
 }
