@@ -20,6 +20,22 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    private int amount;
+    private double amount;
     private LocalDateTime date;
+    private LocalDateTime shippingDate;
+    private OrderStatus status;
+    @OneToOne
+    private Cart cart;
+    @OneToOne(mappedBy = "order")
+    private Payment payment;
+}
+enum OrderStatus {
+    OrderCancelled,
+    OrderDelivered,
+    OrderInTransit,
+    OrderPaymentDue,
+    OrderPickupAvailable,
+    OrderProblem,
+    OrderProcessing,
+    OrderReturned
 }

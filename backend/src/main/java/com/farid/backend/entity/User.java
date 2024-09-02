@@ -20,4 +20,8 @@ public class User {
     private String email;
     private String password;
     private String phone;
+    @OneToOne(mappedBy = "user")
+    private Cart cart;
+    @OneToOne(mappedBy = "user")
+    private Address address;
 }

@@ -20,7 +20,6 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String name;
-
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Product> products;
 }

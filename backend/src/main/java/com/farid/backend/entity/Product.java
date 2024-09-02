@@ -20,7 +20,7 @@ public class Product {
     private UUID id;
     private String name;
     private String description;
-    private Double price;
+    private double price;
     private String imageUrl;
     @ManyToMany(mappedBy = "products")
     private Set<Cart> carts;

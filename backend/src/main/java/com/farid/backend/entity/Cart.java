@@ -23,5 +23,7 @@ public class Cart {
     private User user;
     @ManyToMany
     private Set<Product> products;
+    @OneToOne(mappedBy = "cart")
+    private Order order;
 
 }
