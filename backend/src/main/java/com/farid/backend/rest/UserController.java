@@ -15,11 +15,11 @@ public class UserController {
     UserService userService;
 
     @PostMapping
-    public User addUser(@RequestBody UserDTO userDTO){
+    public UserDTO addUser(@RequestBody UserDTO userDTO){
         return userService.addUser(userDTO);
     }
     @GetMapping("/{id}")
-    public User getUser(@PathVariable UUID id){
+    public UserDTO getUser(@PathVariable UUID id){
         return userService.getUser(id);
     }
 }
