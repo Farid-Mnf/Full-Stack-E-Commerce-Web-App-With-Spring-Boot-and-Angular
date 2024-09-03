@@ -29,13 +29,3 @@ public class Order {
     @OneToOne(mappedBy = "order")
     private Payment payment;
 }
-enum OrderStatus {
-    OrderCancelled,
-    OrderDelivered,
-    OrderInTransit,
-    OrderPaymentDue,
-    OrderPickupAvailable,
-    OrderProblem,
-    OrderProcessing,
-    OrderReturned
-}
