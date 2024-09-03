@@ -26,7 +26,6 @@ public class OrderService {
                         .amount(orderDTO.getAmount())
                         .status(orderDTO.getStatus())
                         .payment(paymentRepository.findById(orderDTO.getPaymentId()).get())
-                        .cart(cartRepository.findById(orderDTO.getCartId()).get())
                         .build()
         );
         return orderToOrderDTO(order);
@@ -38,7 +37,6 @@ public class OrderService {
     public OrderDTO orderToOrderDTO(Order order){
         return OrderDTO.builder()
                 .id(order.getId())
-                .cartId(order.getCart().getId())
                 .paymentId(order.getPayment().getId())
                 .amount(order.getAmount())
                 .status(order.getStatus())

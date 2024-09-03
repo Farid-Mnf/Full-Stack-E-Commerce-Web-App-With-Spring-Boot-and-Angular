@@ -3,14 +3,13 @@ package com.farid.backend.dto;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.Set;
 import java.util.UUID;
 
 @Data
 @Builder
-public class ProductDTO {
+public class CartDTO {
     private UUID id;
-    private String name;
-    private String description;
-    private Double price;
-    private String imageUrl;
+    private UUID userId;
+    private Set<ProductDTO> productsDTOs;
 }

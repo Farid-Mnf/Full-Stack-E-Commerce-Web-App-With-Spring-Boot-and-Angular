@@ -24,8 +24,6 @@ public class Order {
     private LocalDateTime date;
     private LocalDateTime shippingDate;
     private OrderStatus status;
-    @OneToOne
-    private Cart cart;
     @OneToOne(mappedBy = "order")
     private Payment payment;
 }
