@@ -34,7 +34,7 @@ public class CartService {
     public CartItemDTO addProductToCart(UUID productId, UUID cartId, int quantity){
         Cart cart = cartRepository.findById(cartId).get();
         Product product = productRepository.findById(productId).get();
-        // TODO: add product to cart
+
         CartItem cartItem = cartItemRepository.save(
                 CartItem.builder()
                         .cart(cart)
@@ -52,28 +52,9 @@ public class CartService {
                 .price(cartItem.getPrice())
                 .build();
     }
-    public CartDTO createCart(CartDTO cartDTO){
-
-        Optional<User> optionalUser = userRepository.findById(cartDTO.getUserId());
-        if(optionalUser.isPresent()){
-            if(optionalUser.get().getCart() == null){ // no cart, CREATE it
-                Cart newCart = cartRepository.save(
-                        Cart.builder()
-                                .user(optionalUser.get())
-                                .build()
-                );
-                return cartToCartDTO(newCart);
-            }else{ // cart found, RETURN it
-                return cartToCartDTO(optionalUser.get().getCart());
-            }
-        }else{
-            return null;
-        }
-    }
     public CartDTO cartToCartDTO(Cart cart){
         return CartDTO.builder()
                 .id(cart.getId())
-                .userId(cart.getUser().getId())
                 .build();
     }
 }
