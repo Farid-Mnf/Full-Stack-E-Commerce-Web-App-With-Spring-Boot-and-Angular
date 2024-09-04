@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -22,9 +24,9 @@ public class Product {
     private String description;
     private double price;
     private String imageUrl;
-    @ManyToMany(mappedBy = "products")
-    private Set<Cart> carts;
-
+    private int availableQuantity;
+    @OneToMany(mappedBy = "product")
+    private List<CartItem> cartItems = new ArrayList<>();
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
