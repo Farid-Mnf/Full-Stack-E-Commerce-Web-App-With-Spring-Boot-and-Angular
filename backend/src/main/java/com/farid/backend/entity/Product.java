@@ -1,5 +1,6 @@
 package com.farid.backend.entity;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,10 +22,13 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+    @Column(nullable = false)
     private String name;
     private String description;
+    @Column(nullable = false)
     private BigDecimal price;
     private String imageUrl;
+    @Column(nullable = false)
     private int availableQuantity;
     @OneToMany(mappedBy = "product")
     private List<CartItem> cartItems = new ArrayList<>();

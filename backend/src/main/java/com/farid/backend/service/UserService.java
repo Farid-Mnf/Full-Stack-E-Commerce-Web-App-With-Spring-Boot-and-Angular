@@ -79,6 +79,7 @@ public class UserService {
     }
     private Set<CartItemDTO> getCartItemsDTOS(List<CartItem> cartItems){
         Set<CartItemDTO> cartItemDTOS = new HashSet<>();
+        if(cartItems == null) return cartItemDTOS;
         cartItems.forEach(cartItem -> {
             cartItemDTOS.add(cartItemToCartItemDTO(cartItem));
         });

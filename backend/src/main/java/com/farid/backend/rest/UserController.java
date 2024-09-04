@@ -1,7 +1,6 @@
 package com.farid.backend.rest;
 
 import com.farid.backend.dto.UserDTO;
-import com.farid.backend.entity.User;
 import com.farid.backend.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;

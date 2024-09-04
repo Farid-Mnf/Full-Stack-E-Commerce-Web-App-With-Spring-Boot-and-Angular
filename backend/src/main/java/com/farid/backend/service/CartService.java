@@ -5,7 +5,6 @@ import com.farid.backend.dto.CartItemDTO;
 import com.farid.backend.entity.Cart;
 import com.farid.backend.entity.CartItem;
 import com.farid.backend.entity.Product;
-import com.farid.backend.entity.User;
 import com.farid.backend.repository.CartItemRepository;
 import com.farid.backend.repository.CartRepository;
 import com.farid.backend.repository.ProductRepository;
@@ -20,7 +19,6 @@ import java.util.UUID;
 @AllArgsConstructor
 public class CartService {
     private CartRepository cartRepository;
-    private UserRepository userRepository;
     private ProductRepository productRepository;
     private CartItemRepository cartItemRepository;
 
@@ -34,6 +32,9 @@ public class CartService {
     public CartItemDTO addProductToCart(UUID productId, UUID cartId, int quantity){
         Cart cart = cartRepository.findById(cartId).get();
         Product product = productRepository.findById(productId).get();
+
+        // check if quantity exceeds the available quantity
+        if(product.getAvailableQuantity() < quantity) return null;
 
         CartItem cartItem = cartItemRepository.save(
                 CartItem.builder()

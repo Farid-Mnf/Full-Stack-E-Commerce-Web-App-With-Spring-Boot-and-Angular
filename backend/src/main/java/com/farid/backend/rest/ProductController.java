@@ -13,17 +13,17 @@ import java.util.UUID;
 @AllArgsConstructor
 @RequestMapping("/product")
 public class ProductController {
+    private ProductService productService;
     @GetMapping
-    public List<Product> getAllProducts(){
+    public List<ProductDTO> getAllProducts(){
         return productService.getAllProducts();
     }
-    private ProductService productService;
     @GetMapping("/{id}")
-    public Product getProduct(@PathVariable UUID id){
+    public ProductDTO getProduct(@PathVariable UUID id){
         return productService.getProductById(id);
     }
     @PostMapping
-    public Product addProduct(@RequestBody ProductDTO productDTO){
+    public ProductDTO addProduct(@RequestBody ProductDTO productDTO){
         return productService.addProduct(productDTO);
     }
 

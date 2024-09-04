@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -21,6 +22,9 @@ public class CategoryService {
                         .build()
         );
         return categoryToCategoryDTO(category);
+    }
+    public CategoryDTO getCategory(UUID id){
+        return categoryToCategoryDTO(categoryRepository.findById(id).get());
     }
     public List<CategoryDTO> getAllCategories(){
         List<CategoryDTO> categoryDTOS = new LinkedList<>();

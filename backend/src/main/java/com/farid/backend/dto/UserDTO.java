@@ -12,7 +12,6 @@ public class UserDTO {
     private String email;
     private String password;
     private String phone;
-    private UUID cartId;
     private AddressDTO addressDTO;
     private CartDTO cartDTO;
 }
