@@ -22,8 +22,8 @@ public class User {
     private String email;
     private String password;
     private String phone;
-    @OneToOne(mappedBy = "user")
+    @OneToOne(cascade = CascadeType.ALL)
     private Cart cart;
-    @OneToOne(mappedBy = "user")
+    @OneToOne(cascade = CascadeType.ALL)
     private Address address;
 }

@@ -13,5 +13,6 @@ public class UserDTO {
     private String password;
     private String phone;
     private UUID cartId;
-    private UUID addressId;
+    private AddressDTO addressDTO;
+    private CartDTO cartDTO;
 }
