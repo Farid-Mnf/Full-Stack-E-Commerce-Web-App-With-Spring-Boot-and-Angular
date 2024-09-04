@@ -3,6 +3,7 @@ package com.farid.backend.dto;
 import lombok.Builder;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Data
@@ -11,6 +12,6 @@ public class ProductDTO {
     private UUID id;
     private String name;
     private String description;
-    private Double price;
+    private BigDecimal price;
     private String imageUrl;
 }

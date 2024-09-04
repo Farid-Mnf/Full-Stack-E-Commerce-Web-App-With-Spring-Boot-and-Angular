@@ -1,17 +1,19 @@
 package com.farid.backend.service;
 
 import com.farid.backend.dto.CartDTO;
-import com.farid.backend.dto.ProductDTO;
+import com.farid.backend.dto.CartItemDTO;
 import com.farid.backend.entity.Cart;
+import com.farid.backend.entity.CartItem;
+import com.farid.backend.entity.Product;
 import com.farid.backend.entity.User;
+import com.farid.backend.repository.CartItemRepository;
 import com.farid.backend.repository.CartRepository;
+import com.farid.backend.repository.ProductRepository;
 import com.farid.backend.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -19,6 +21,8 @@ import java.util.UUID;
 public class CartService {
     private CartRepository cartRepository;
     private UserRepository userRepository;
+    private ProductRepository productRepository;
+    private CartItemRepository cartItemRepository;
 
     public CartDTO getCart(UUID id){
         Optional<Cart> optionalCart = cartRepository.findById(id);
@@ -26,6 +30,27 @@ public class CartService {
             return cartToCartDTO(optionalCart.get());
         }
         return null;
+    }
+    public CartItemDTO addProductToCart(UUID productId, UUID cartId, int quantity){
+        Cart cart = cartRepository.findById(cartId).get();
+        Product product = productRepository.findById(productId).get();
+        // TODO: add product to cart
+        CartItem cartItem = cartItemRepository.save(
+                CartItem.builder()
+                        .cart(cart)
+                        .product(product)
+                        .quantity(quantity)
+                        .price(product.getPrice())
+                        .build()
+        );
+
+        return CartItemDTO.builder()
+                .productId(cartItem.getProduct().getId())
+                .cartId(cartItem.getCart().getId())
+                .quantity(cartItem.getQuantity())
+                .id(cartItem.getId())
+                .price(cartItem.getPrice())
+                .build();
     }
     public CartDTO createCart(CartDTO cartDTO){
 
@@ -46,21 +71,9 @@ public class CartService {
         }
     }
     public CartDTO cartToCartDTO(Cart cart){
-        Set<ProductDTO> cartProductDTOs = new HashSet<>();
-        cart.getProducts().forEach(product -> {
-            cartProductDTOs.add(
-                    ProductDTO.builder()
-                            .name(product.getName())
-                            .price(product.getPrice())
-                            .description(product.getDescription())
-                            .imageUrl(product.getImageUrl())
-                            .build()
-            );
-        });
         return CartDTO.builder()
                 .id(cart.getId())
                 .userId(cart.getUser().getId())
-                .productsDTOs(cartProductDTOs)
                 .build();
     }
 }
