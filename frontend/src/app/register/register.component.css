@@ -1,0 +1,6 @@
+.image-column {
+    background-image: url('/assets/new-user.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 90vh; /* Full height */
+}
