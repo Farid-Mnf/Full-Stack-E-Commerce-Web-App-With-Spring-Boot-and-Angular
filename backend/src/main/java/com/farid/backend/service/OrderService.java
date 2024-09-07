@@ -2,7 +2,6 @@ package com.farid.backend.service;
 
 import com.farid.backend.dto.OrderDTO;
 import com.farid.backend.entity.Order;
-import com.farid.backend.repository.CartRepository;
 import com.farid.backend.repository.OrderRepository;
 import com.farid.backend.repository.PaymentRepository;
 import lombok.AllArgsConstructor;
@@ -16,7 +15,6 @@ import java.util.UUID;
 public class OrderService {
     private OrderRepository orderRepository;
     private PaymentRepository paymentRepository;
-    private CartRepository cartRepository;
 
     public OrderDTO addOrder(OrderDTO orderDTO){
         Order order = orderRepository.save(
