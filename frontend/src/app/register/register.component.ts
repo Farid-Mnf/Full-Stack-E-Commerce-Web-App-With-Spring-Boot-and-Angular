@@ -2,7 +2,8 @@ import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { UserDTO } from '../model/UserDTO';
 import { AddressDTO } from '../model/AddressDTO';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -63,12 +64,16 @@ import { HttpClient } from '@angular/common/http';
 export class RegisterComponent {
   apiURL = 'http://localhost:8080/user';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
   handleFormSubmition() {
     const addressDTO: AddressDTO = new AddressDTO(this.register.value.city ?? '', this.register.value.country ?? '', this.register.value.streetName ?? '');
     const userDTO: UserDTO = new UserDTO(this.register.value.name ?? '', this.register.value.email ?? '', this.register.value.phone ?? '', this.register.value.password ?? '', addressDTO);
 
-    this.http.post<UserDTO>(this.apiURL, userDTO).subscribe(data => alert(data.name + " " + data.email + " " + data.addressDTO.streetName));
+    this.http.post<UserDTO>(this.apiURL, userDTO, { observe: 'response'}).subscribe((response: HttpResponse<any>) => {
+      if (response.status === 200 || response.status === 201) {
+        this.router.navigate(['/login']);
+      }
+    });
 
   }
 

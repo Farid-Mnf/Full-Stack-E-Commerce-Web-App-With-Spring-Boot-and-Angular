@@ -1,0 +1,77 @@
+import { Component } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+import { LoginRequestDTO } from '../model/LoginRequestDTO';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { AuthService } from '../service/auth.service';
+import { NgIf } from '@angular/common';
+
+@Component({
+  selector: 'login',
+  standalone: true,
+  imports: [RouterLink, ReactiveFormsModule, NgIf],
+  template: `
+<div class="background">
+  <div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="card p-5 login-card">
+      <h3 class="text-center mb-4">Login</h3>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="form-group mb-3">
+          <label for="email">Email</label>
+          <input type="email" id="email" class="form-control" formControlName="email" placeholder="Enter your email">
+          <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="text-danger">
+            Please enter a valid email.
+          </div>
+        </div>
+
+        <div class="form-group mb-3">
+          <label for="password">Password</label>
+          <input type="password" id="password" class="form-control" formControlName="password" placeholder="Enter your password">
+          <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="text-danger">
+            Password must be at least 6 characters long.
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block" [disabled]="loginForm.invalid">Login</button>
+      </form>
+    </div>
+  </div>
+</div>
+`,
+  styleUrl: './login.component.css'
+})
+export class LoginComponent {
+
+  loginForm: FormGroup;
+
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {
+    this.loginForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]]
+    });
+  }
+
+  onSubmit(): void {
+    if (this.loginForm.valid) {
+      const loginRequest = new LoginRequestDTO(
+        this.loginForm.value.email,
+        this.loginForm.value.password
+      );
+
+      this.authService.login(loginRequest).subscribe(
+        (response) => {
+          console.log(response.jwtToken);
+          localStorage.setItem('jwtToken', response.jwtToken);
+          this.router.navigate(['/home']);
+        },
+        (error) => {
+          console.error('Login failed', error);
+        }
+      );
+    }
+  }
+
+}

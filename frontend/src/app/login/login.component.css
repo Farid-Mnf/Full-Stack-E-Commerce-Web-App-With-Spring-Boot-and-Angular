@@ -1,0 +1,36 @@
+/* Styling for the background image */
+.background {
+    background-image: url('/assets/medium-login.jpg');
+    background-size: cover;
+    background-position: center bottom;
+    background-repeat: no-repeat;
+    height: 100vh;
+    width: 100vw;
+    position: relative;
+  }
+  
+  /* Center the card and float it slightly to the left */
+  .login-card {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    transform: translateX(-400px); /* Adjust to float the card to the left */
+  }
+  
+  /* Container that keeps everything centered vertically */
+  .vh-100 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+  }
+  
+  /* Card styling */
+  .card {
+    padding: 20px;
+    border-radius: 10px;
+  }
+  
