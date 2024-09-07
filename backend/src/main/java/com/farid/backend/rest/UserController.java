@@ -2,6 +2,7 @@ package com.farid.backend.rest;
 
 import com.farid.backend.config.JwtService;
 import com.farid.backend.dto.AuthRequestDTO;
+import com.farid.backend.dto.JwtTokenResponse;
 import com.farid.backend.dto.UserDTO;
 import com.farid.backend.service.UserService;
 import lombok.AllArgsConstructor;
@@ -31,7 +32,8 @@ public class UserController {
         return userService.getUser(id);
     }
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody AuthRequestDTO authRequestDTO) {
+
+    public ResponseEntity<JwtTokenResponse> login(@RequestBody AuthRequestDTO authRequestDTO) {
         try{
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     authRequestDTO.getEmail(),
@@ -39,9 +41,9 @@ public class UserController {
             ));
 
             String jwt = jwtService.generateJwtToken(authentication);
-            return ResponseEntity.ok("Bearer " + jwt);
+            return ResponseEntity.ok(new JwtTokenResponse("Bearer " + jwt));
         }catch (Exception e){
-            return new ResponseEntity<>("Forbidden", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }
     }
 }
