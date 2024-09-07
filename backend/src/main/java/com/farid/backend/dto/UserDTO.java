@@ -8,7 +8,7 @@ import java.util.UUID;
 @Builder
 public class UserDTO {
     private UUID id;
-    private String username;
+    private String name;
     private String email;
     private String password;
     private String phone;

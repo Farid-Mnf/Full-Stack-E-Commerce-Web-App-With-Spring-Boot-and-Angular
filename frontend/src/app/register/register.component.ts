@@ -14,7 +14,7 @@ import { HttpClient } from '@angular/common/http';
         <h2 class="mb-4 text-center">Register</h2>
         <form [formGroup]="register" (submit)="handleFormSubmition()">
           <label for="username" class="form-label">Name:</label>
-          <input id="username" formControlName="username" type="text" class="form-control mb-3" placeholder="Enter your name">
+          <input id="username" formControlName="name" type="text" class="form-control mb-3" placeholder="Enter your name">
         
           <label for="email" class="form-label">Email:</label>
           <input id="email" formControlName="email" type="email" class="form-control mb-3" placeholder="Enter your email">
@@ -66,14 +66,14 @@ export class RegisterComponent {
   constructor(private http: HttpClient) { }
   handleFormSubmition() {
     const addressDTO: AddressDTO = new AddressDTO(this.register.value.city ?? '', this.register.value.country ?? '', this.register.value.streetName ?? '');
-    const userDTO: UserDTO = new UserDTO(this.register.value.username ?? '', this.register.value.email ?? '', this.register.value.phone ?? '', this.register.value.password ?? '', addressDTO);
+    const userDTO: UserDTO = new UserDTO(this.register.value.name ?? '', this.register.value.email ?? '', this.register.value.phone ?? '', this.register.value.password ?? '', addressDTO);
 
-    this.http.post<UserDTO>(this.apiURL, userDTO).subscribe(data => alert(data.username + " " + data.email + " " + data.addressDTO.streetName));
+    this.http.post<UserDTO>(this.apiURL, userDTO).subscribe(data => alert(data.name + " " + data.email + " " + data.addressDTO.streetName));
 
   }
 
   register = new FormGroup({
-    username: new FormControl(''),
+    name: new FormControl(''),
     email: new FormControl(''),
     password: new FormControl(''),
     phone: new FormControl(''),

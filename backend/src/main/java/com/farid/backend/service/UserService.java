@@ -10,7 +10,7 @@ import com.farid.backend.entity.CartItem;
 import com.farid.backend.entity.User;
 import com.farid.backend.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -19,6 +19,7 @@ import java.util.*;
 @AllArgsConstructor
 public class UserService {
     private UserRepository userRepository;
+    private BCryptPasswordEncoder passwordEncoder;
 
     public List<UserDTO> getUsers(){
         List<UserDTO> users = new LinkedList<>();
@@ -41,8 +42,8 @@ public class UserService {
                 User.builder()
                         .phone(userDTO.getPhone())
                         .email(userDTO.getEmail())
-                        .username(userDTO.getUsername())
-                        .password(userDTO.getPassword())
+                        .name(userDTO.getName())
+                        .password(passwordEncoder.encode(userDTO.getPassword()))
                         .address(address)
                         .cart(cart)
                         .build()
@@ -58,7 +59,7 @@ public class UserService {
         return UserDTO.builder()
                 .phone(user.getPhone())
                 .email(user.getEmail())
-                .username(user.getUsername())
+                .name(user.getName())
                 .password(user.getPassword())
                 .id(user.getId())
                 .addressDTO(

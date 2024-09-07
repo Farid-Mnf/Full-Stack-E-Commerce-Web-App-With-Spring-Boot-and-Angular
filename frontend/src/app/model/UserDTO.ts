@@ -1,13 +1,13 @@
 import { AddressDTO } from "./AddressDTO";
 
 export class UserDTO{
-    username: string;
+    name: string;
     email: string;
     phone: string;
     password: string;
     addressDTO: AddressDTO;
-    constructor(username: string, email: string, phone: string, password: string, addressDTO: AddressDTO){
-        this.username = username;
+    constructor(name: string, email: string, phone: string, password: string, addressDTO: AddressDTO){
+        this.name = name;
         this.email = email;
         this.phone = phone;
         this.password = password;
