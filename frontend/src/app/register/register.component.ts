@@ -3,11 +3,11 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { UserDTO } from '../model/UserDTO';
 import { AddressDTO } from '../model/AddressDTO';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   template: `
   <div class="container-sm mt-5">
     <div class="row">
@@ -49,7 +49,8 @@ import { Router } from '@angular/router';
               </div>
           </div>
         
-          <button type="submit" class="btn btn-primary mt-3">Register</button>
+          <button type="submit" class="btn btn-primary">Register</button>
+          <i class="m-2"></i>Already have an account? <a [routerLink]="['/login']">Login instead</a>
         </form>
       </div>
 

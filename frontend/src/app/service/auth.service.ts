@@ -13,7 +13,7 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   login(loginRequest: LoginRequestDTO): Observable<any> {
-    return this.http.post<any>(this.loginUrl, loginRequest);
+    return this.http.post<any>(this.loginUrl, loginRequest, { observe: 'response'});
   }
 
 }

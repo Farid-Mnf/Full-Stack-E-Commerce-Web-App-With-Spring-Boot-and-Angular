@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-
+import { RouterLink } from '@angular/router';
 @Component({
   selector: 'my-header',
   standalone: true,
-  imports: [],
+  imports: [RouterLink],
   template: `
     <!-- Header -->
     <nav class="navbar navbar-expand-lg bg-dark fixed-top">
@@ -29,7 +29,7 @@ import { Component } from '@angular/core';
                       <a class="nav-link text-light" href="#"><i class="fa-solid fa-user"></i></a>  
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link text-light" href="#">Login</a>
+                      <a class="nav-link text-light" [routerLink]="['/login']">Login</a>
                   </li>
               </ul>
           </div>

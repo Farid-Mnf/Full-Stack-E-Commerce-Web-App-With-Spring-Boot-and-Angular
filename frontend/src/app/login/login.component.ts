@@ -29,9 +29,13 @@ import { NgIf } from '@angular/common';
           <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="text-danger">
             Password must be at least 6 characters long.
           </div>
+          <div *ngIf="error" class="text-danger">
+            Wrong email or password.
+          </div>
         </div>
 
         <button type="submit" class="btn btn-primary btn-block" [disabled]="loginForm.invalid">Login</button>
+        <a [routerLink]="['/register']" class="m-4">Create new account?</a>
       </form>
     </div>
   </div>
@@ -42,6 +46,7 @@ import { NgIf } from '@angular/common';
 export class LoginComponent {
 
   loginForm: FormGroup;
+  error = false;
 
   constructor(
     private fb: FormBuilder,
@@ -63,12 +68,14 @@ export class LoginComponent {
 
       this.authService.login(loginRequest).subscribe(
         (response) => {
+          this.error = false;
           console.log(response.jwtToken);
           localStorage.setItem('jwtToken', response.jwtToken);
           this.router.navigate(['/home']);
         },
         (error) => {
           console.error('Login failed', error);
+          this.error = true;
         }
       );
     }

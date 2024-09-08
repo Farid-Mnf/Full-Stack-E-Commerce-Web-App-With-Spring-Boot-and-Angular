@@ -5,18 +5,18 @@ import { FeaturedProductsComponent } from "../featured-products/featured-product
 import { ProductRecommendationsComponent } from "../product-recommendations/product-recommendations.component";
 import { FooterComponent } from "../footer/footer.component";
 
-
-
 @Component({
   selector: 'home',
   standalone: true,
   imports: [HeaderComponent, CategoriesComponent, FeaturedProductsComponent, ProductRecommendationsComponent, FooterComponent],
   template: `
-  <my-header></my-header>
-  <categories></categories>
-  <featured-products></featured-products>
-  <product-recommendations></product-recommendations>
-  <app-footer></app-footer>
+  <section class="home-page">
+    <my-header></my-header>
+    <categories></categories>
+    <featured-products></featured-products>
+    <product-recommendations></product-recommendations>
+    <app-footer></app-footer>
+  </section>
   `,
   styleUrl: './home.component.css'
 })
