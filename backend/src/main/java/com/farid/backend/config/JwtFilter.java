@@ -28,13 +28,14 @@ public class JwtFilter extends OncePerRequestFilter {
                                     FilterChain filterChain
     ) throws ServletException, IOException {
         String header = request.getHeader("Authorization");
-
+        System.out.println("filter called");
         if (header == null || !header.startsWith("Bearer")) {
             filterChain.doFilter(request, response);
             return;
         }
 
         String jwtToken = header.split(" ")[1].trim();
+        System.out.println("Splitting JWT: " + jwtToken);
 
         try {
             if (validateJwtToken(jwtToken)) {

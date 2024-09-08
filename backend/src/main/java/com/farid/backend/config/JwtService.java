@@ -1,9 +1,12 @@
 package com.farid.backend.config;
 
+import com.farid.backend.entity.User;
+import com.farid.backend.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,10 +14,14 @@ import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 @Service
+@RequiredArgsConstructor
 public class JwtService {
+    private final UserRepository userRepository;
 
     @Value("${security.jwt.secret-key}")
     private String VERY_BIG_SECRET_KEY;
@@ -27,10 +34,17 @@ public class JwtService {
         Date expiration = new Date(now.getTime() + JWT_EXPIRATION);
 
         UserDetails user = (UserDetails) authentication.getPrincipal();
+        User entityUser = userRepository.findUserByEmail(user.getUsername()).orElseThrow();
+
+        Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("name", entityUser.getName());
+        extraClaims.put("cartId", entityUser.getCart().getId());
+        extraClaims.put("userId", entityUser.getId());
 
         return Jwts.builder()
                 .setSubject(user.getUsername())
                 .setExpiration(expiration)
+                .addClaims(extraClaims)
                 .setIssuedAt(new Date())
                 .signWith(getSigningKey())
                 .compact();

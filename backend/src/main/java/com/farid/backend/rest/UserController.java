@@ -23,7 +23,7 @@ public class UserController {
     private AuthenticationManager authenticationManager;
     private JwtService jwtService;
 
-    @PostMapping
+    @PostMapping("/register")
     public UserDTO addUser(@RequestBody UserDTO userDTO){
         return userService.addUser(userDTO);
     }
@@ -32,14 +32,12 @@ public class UserController {
         return userService.getUser(id);
     }
     @PostMapping("/login")
-
     public ResponseEntity<JwtTokenResponse> login(@RequestBody AuthRequestDTO authRequestDTO) {
         try{
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     authRequestDTO.getEmail(),
                     authRequestDTO.getPassword()
             ));
-
             String jwt = jwtService.generateJwtToken(authentication);
             return ResponseEntity.ok(new JwtTokenResponse("Bearer " + jwt));
         }catch (Exception e){
