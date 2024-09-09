@@ -4,6 +4,7 @@ import { CategoriesComponent } from "../categories/categories.component";
 import { FeaturedProductsComponent } from "../featured-products/featured-products.component";
 import { ProductRecommendationsComponent } from "../product-recommendations/product-recommendations.component";
 import { FooterComponent } from "../footer/footer.component";
+import { AuthService } from '../service/auth.service';
 
 @Component({
   selector: 'home',
@@ -21,7 +22,12 @@ import { FooterComponent } from "../footer/footer.component";
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
-  jwtToken: string | null = localStorage.getItem('jwtToken');
+  constructor(private authService: AuthService){
+    this.jwtToken = authService.getToken();
+    console.log("Current Token: " + this.jwtToken);
+    
+  }
+  jwtToken: string | null = '';
   
 
   

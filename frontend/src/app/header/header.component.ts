@@ -26,7 +26,7 @@ import { RouterLink } from '@angular/router';
                       </a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link text-light" href="#"><i class="fa-solid fa-user"></i></a>  
+                      <a class="nav-link text-light" [routerLink]="['/profile']"><i class="fa-solid fa-user"></i></a>
                   </li>
                   <li class="nav-item">
                       <a class="nav-link text-light" [routerLink]="['/login']">Login</a>

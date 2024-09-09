@@ -69,8 +69,9 @@ export class LoginComponent {
       this.authService.login(loginRequest).subscribe(
         (response) => {
           this.error = false;
-          console.log(response.jwtToken);
-          localStorage.setItem('jwtToken', response.jwtToken);
+          const jwt = response.body.jwtToken.split(' ')[1];
+          this.authService.saveToken(jwt);
+          console.log('saved token: ' + jwt);
           this.router.navigate(['/home']);
         },
         (error) => {
