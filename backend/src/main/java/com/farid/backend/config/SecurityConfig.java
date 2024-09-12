@@ -38,7 +38,7 @@ public class SecurityConfig {
                         auth
                                 .requestMatchers("/user/register").permitAll()
                                 .requestMatchers("/user/login").permitAll()
-                                .requestMatchers(HttpMethod.OPTIONS,"/user/**").permitAll()
+                                .requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
                                 .anyRequest().authenticated()
 
                 ).csrf(AbstractHttpConfigurer::disable)
