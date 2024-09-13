@@ -17,7 +17,7 @@ import { HttpClient } from '@angular/common/http';
   <div class="row">
     
     <!-- Left Side Panel -->
-    <div class="col-md-3 bg-light" style="min-height: 100vh;">
+    <div class="col-md-3" style="min-height: 100vh;background-color:#d7d7d7">
       <ul class="nav flex-column p-3">
         <button class="btn btn-dark mb-4 w-50" (click)="goHome()"><i class="fa-solid fa-house"></i> Home</button>
         <!-- Basic Info -->
@@ -44,7 +44,7 @@ import { HttpClient } from '@angular/common/http';
     </div>
     @if(isLoggedIn && userDetails){
     <!-- Right Side Content -->
-    <div class="col-md-9 p-4">
+    <div class="col-md-9 p-4" style="background-color: #f1f1f1;">
       @if(currentView === 'overview'){
         <div class="container mt-4">
           <div class="justify-content-center">
@@ -77,30 +77,61 @@ import { HttpClient } from '@angular/common/http';
           <!-- User Information -->
           <div class="">
             <div class="card">
-              <div class="card-header">
-                <h3>Basic Information</h3>
+              <div class="card-header text-center" style="background-color: darkgray;">
+                <h3><i class="fa-solid fa-user"></i> Basic Information</h3>
               </div>
-              <div class="card-body">
-                <ul class="list-group list-group-flush">
-                  <li class="list-group-item fs-4">
-                    <strong>Name:</strong> {{ userDetails.name }}
+              <div class="card-body" style="background-color: lightgray;">
+              <ul class="list-group list-group-flush user-info-list">
+                <li class="list-group-item fs-3">
+                  <div class="row p-3">
+                    <div class="col-md-6">
+                      <span><strong>Name:</strong> {{ userDetails.name }}</span>
+                    </div>
+                    <div class="col-md-6">
+                      <span><strong>Email:</strong> {{ userDetails.email }}</span>
+                    </div>
+                  </div>
+                </li>
+                <li class="list-group-item fs-3">
+                  <div class="row p-3">
+                    <div class="col-md-6">
+                      <span><strong>Phone:</strong> {{ userDetails.phone }}</span>
+                    </div>
+                    <div class="col-md-6">
+                      <span><strong>Country:</strong> {{ userDetails.addressDTO.country }}</span>
+                    </div>
+                  </div>
+                </li>
+                <li class="list-group-item fs-3">
+                  <div class="row p-3">
+                    <div class="col-md-6">
+                      <span><strong>City:</strong> {{ userDetails.addressDTO.city }}</span>
+                    </div>
+                    <div class="col-md-6">
+                      <span><strong>Street name:</strong> {{ userDetails.addressDTO.streetName }}</span>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+
+                <!-- <ul class="list-group list-group-flush user-info-list">
+                  <li class="list-group-item d-flex justify-content-around align-items-center fs-3">
+                    <span><strong>Name:</strong> {{ userDetails.name }}</span>
+                    <span><strong>Email:</strong> {{ userDetails.email }}</span>
                   </li>
-                  <li class="list-group-item fs-4">
-                    <strong>Email:</strong> {{ userDetails.email }}
+                  <li class="list-group-item d-flex justify-content-around align-items-center fs-3">
+                    <span><strong>Phone:</strong> {{ userDetails.phone }}</span>
+                    <span><strong>Country:</strong> {{ userDetails.addressDTO.country }}</span>
                   </li>
-                  <li class="list-group-item fs-4">
-                    <strong>Phone:</strong> {{ userDetails.phone }}
+                  <li class="list-group-item d-flex justify-content-around align-items-center fs-3">
                   </li>
-                  <li class="list-group-item fs-4">
-                    <strong>Country:</strong> {{ userDetails.addressDTO.country }}
-                  </li>
-                  <li class="list-group-item fs-4">
+                  <li class="list-group-item d-flex justify-content-around align-items-center fs-3">
                     <strong>City:</strong> {{ userDetails.addressDTO.city }}
                   </li>
-                  <li class="list-group-item fs-4">
+                  <li class="list-group-item d-flex justify-content-around align-items-center fs-3">
                     <strong>Street Name:</strong> {{ userDetails.addressDTO.streetName }}
                   </li>
-                </ul>
+                </ul> -->
               </div>
             </div>
           </div>
@@ -124,11 +155,121 @@ import { HttpClient } from '@angular/common/http';
       }
 
       @if(currentView === 'sell'){
-        <div>
-          <h2>Sell Items</h2>
-          <p>Manage your listed items for sale.</p>
-          <!-- Sell Items Content -->
+        <div class="container mt-5" >
+          <!-- Add Product Section -->
+          <div class="card mb-4">
+            <div class="card-header text-center" style="background-color: darkgray;">
+              <h3><i class="fas fa-plus-circle"></i> Add a New Product</h3>
+            </div>
+            <div class="card-body" style="background-color: lightgray;">
+              <form>
+                <div class="mb-3">
+                  <label for="productName" class="form-label">
+                    <i class="fas fa-box"></i> Product Name
+                  </label>
+                  <input type="text" class="form-control smoky" id="productName" placeholder="Enter product name">
+                </div>
+
+                <div class="mb-3">
+                  <label for="productDescription" class="form-label">
+                    <i class="fas fa-align-left"></i> Product Description
+                  </label>
+                  <textarea class="form-control smoky" id="productDescription" rows="3" placeholder="Enter product description"></textarea>
+                </div>
+
+                <div class="mb-3">
+                  <label for="productPrice" class="form-label">
+                    <i class="fas fa-dollar-sign"></i> Price
+                  </label>
+                  <input type="number" class="form-control smoky" id="productPrice" placeholder="Enter product price">
+                </div>
+
+                <div class="mb-3">
+                  <label for="productQuantity" class="form-label">
+                    <i class="fas fa-cubes"></i> Quantity
+                  </label>
+                  <input type="number" class="form-control smoky" id="productQuantity" placeholder="Enter product quantity">
+                </div>
+
+                <div class="mb-3">
+                  <label for="productCategory" class="form-label">
+                    <i class="fas fa-list"></i> Category
+                  </label>
+                  <select class="form-select smoky" id="productCategory">
+                    <option selected>Select a category</option>
+                    <option value="1">Electronics</option>
+                    <option value="2">Clothing</option>
+                    <option value="3">Home & Kitchen</option>
+                  </select>
+                </div>
+
+                <div class="mb-3">
+                  <label for="productImage" class="form-label">
+                    <i class="fas fa-camera"></i> Product Image
+                  </label>
+                  <input class="form-control smoky" type="file" id="productImage">
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                  <i class="fas fa-plus"></i> Add Product
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <!-- My Products Section -->
+          <div class="card">
+            <div class="card-header" style="background-color: darkgray;">
+              <h3><i class="fas fa-boxes"></i> My Products</h3>
+            </div>
+            <div class="card-body" style="background-color: lightgray;">
+              <div class="row">
+                <!-- Product 1 -->
+                <div class="col-md-4 mb-4">
+                  <div class="card h-100">
+                    <img src="https://via.placeholder.com/150" class="card-img-top" alt="Product 1">
+                    <div class="card-body text-center">
+                      <h5 class="card-title">Product 1</h5>
+                      <p class="card-text"><i class="fas fa-dollar-sign"></i> Price: $100</p>
+                      <button class="btn btn-info">
+                        <i class="fas fa-eye"></i> View Status
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="col-md-4 mb-4">
+                  <div class="card h-100">
+                    <img src="https://via.placeholder.com/150" class="card-img-top" alt="Product 2">
+                    <div class="card-body text-center">
+                      <h5 class="card-title">Product 2</h5>
+                      <p class="card-text"><i class="fas fa-dollar-sign"></i> Price: $200</p>
+                      <button class="btn btn-info">
+                        <i class="fas fa-eye"></i> View Status
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="col-md-4 mb-4">
+                  <div class="card h-100">
+                    <img src="https://via.placeholder.com/150" class="card-img-top" alt="Product 3">
+                    <div class="card-body text-center">
+                      <h5 class="card-title">Product 3</h5>
+                      <p class="card-text"><i class="fas fa-dollar-sign"></i> Price: $150</p>
+                      <button class="btn btn-info">
+                        <i class="fas fa-eye"></i> View Status
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+
       }
 
       @if(currentView === 'payment'){

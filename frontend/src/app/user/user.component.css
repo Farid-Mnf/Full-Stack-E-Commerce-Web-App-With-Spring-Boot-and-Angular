@@ -30,3 +30,10 @@
     padding: 2rem !important;
   }
   
+  .smoky{
+    background-color: whitesmoke;
+  }
+
+  .user-info-list li{
+    background-color: lightgray !important
+  }
