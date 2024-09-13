@@ -24,10 +24,6 @@ import { HttpClient } from '@angular/common/http';
         <li class="nav-item">
           <a class="nav-link active" [class]="{'active': currentView === 'overview'}" (click)="setView('overview')"><i class="fas fa-user-circle"></i> Basic Info</a>
         </li>
-        <!-- Settings -->
-        <li class="nav-item">
-          <a class="nav-link" [class]="{'active': currentView === 'settings'}" (click)="setView('settings')"><i class="fas fa-cog"></i> Account Settings</a>
-        </li>
         <!-- Orders -->
         <li class="nav-item">
           <a class="nav-link" [class]="{'active': currentView === 'orders'}" (click)="setView('orders')"><i class="fas fa-box"></i> My Orders</a>
@@ -40,6 +36,10 @@ import { HttpClient } from '@angular/common/http';
         <li class="nav-item">
           <a class="nav-link"  [class]="{'active': currentView === 'payment'}" (click)="setView('payment')"><i class="fas fa-credit-card"></i> Saved  Payment Methods</a>
         </li>
+        <!-- Settings -->
+        <li class="nav-item">
+          <a class="nav-link" [class]="{'active': currentView === 'settings'}" (click)="setView('settings')"><i class="fas fa-cog"></i> Account Settings</a>
+        </li>
       </ul>
     </div>
     @if(isLoggedIn && userDetails){
@@ -49,6 +49,14 @@ import { HttpClient } from '@angular/common/http';
         <div class="container mt-4">
           <div class="justify-content-center">
             <!-- Profile Image and Upload Button -->
+            @if(loading){
+              <div class="text-center">
+                <div class="spinner-border text-primary" role="status">
+                  <span class="sr-only">Loading...</span>
+                </div>
+                <p>Uploading your image, please wait...</p>
+              </div>
+            }
             <div class="text-center">
               <div class="mb-4">
                 @if(userDetails.userImage){
@@ -143,6 +151,7 @@ import { HttpClient } from '@angular/common/http';
   styleUrl: './user.component.css'
 })
 export class UserComponent {
+  loading: boolean = false;
   currentView: string = 'overview';
   userDetails!: UserDTO | null;
   isLoggedIn: boolean = false;
@@ -181,6 +190,7 @@ export class UserComponent {
 
 
   onImageSelected(event: any) {
+    this.loading = true;
     const file = event.target.files[0];
 
     console.log(file);
@@ -197,12 +207,17 @@ export class UserComponent {
 
     // send to server REST API
     this.http.post('http://localhost:8080/files/user/upload', form, { responseType: 'text' }).subscribe(
-      (fileName: string) => { 
+      (fileName: string) => {
         console.log(fileName);
-        this.userDetails!.userImage = fileName;
+        setTimeout(() => { // mimic slow network loading time(REMOVE THIS TIMEOUT IN PRODUCTION!)
+          this.userDetails!.userImage = fileName;
+          this.loading = false; // End loading after delay
+        }, 1500);
+
       }, 
       error => {
-        console.log('file loading error')
+        console.log('file loading error');
+        this.loading = false;
       }
     );
 
