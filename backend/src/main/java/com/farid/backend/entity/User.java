@@ -25,6 +25,7 @@ public class User implements UserDetails {
     private String email;
     private String password;
     private String phone;
+    private String userImage;
     @OneToOne(cascade = CascadeType.ALL)
     private Cart cart;
     @OneToOne(cascade = CascadeType.ALL)

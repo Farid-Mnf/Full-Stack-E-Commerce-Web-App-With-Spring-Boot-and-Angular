@@ -55,12 +55,18 @@ public class UserService {
         Optional<User> userOptional = userRepository.findById(id);
         return userOptional.isPresent()? userToUserDTO(userOptional.get()) : null;
     }
+
+    public void updateUserImage(String imageName, UUID id){
+        userRepository.updateUserImage(imageName, id);
+    }
+
     private UserDTO userToUserDTO(User user) {
         return UserDTO.builder()
                 .phone(user.getPhone())
                 .email(user.getEmail())
                 .name(user.getName())
                 .password(user.getPassword())
+                .userImage(user.getUserImage())
                 .id(user.getId())
                 .addressDTO(
                         AddressDTO.builder()
@@ -95,4 +101,5 @@ public class UserService {
                 .id(cartItem.getId())
                 .build();
     }
+
 }

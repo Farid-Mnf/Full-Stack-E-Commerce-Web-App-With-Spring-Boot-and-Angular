@@ -3,13 +3,16 @@ import { AuthService } from '../service/auth.service';
 import { UserDTO } from '../model/UserDTO';
 import { UserService } from '../service/user.service';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-user',
   standalone: true,
   imports: [],
   template: `
-
+<!-- @if(!isLoggedIn){
+  {{ goHome() }}
+} -->
 <div class="container-fluid">
   <div class="row">
     
@@ -39,7 +42,7 @@ import { Router } from '@angular/router';
         </li>
       </ul>
     </div>
-
+    @if(isLoggedIn && userDetails){
     <!-- Right Side Content -->
     <div class="col-md-9 p-4">
       @if(currentView === 'overview'){
@@ -48,7 +51,12 @@ import { Router } from '@angular/router';
             <!-- Profile Image and Upload Button -->
             <div class="text-center">
               <div class="mb-4">
-                <img [src]="profileImageUrl || '/assets/user_image.jpg'" class="rounded-circle img-fluid" alt="Profile Image" style="width: 150px; height: 150px; object-fit: cover;">
+                @if(userDetails.userImage){
+                  <img [src]="'http://localhost:8080/images/' + userDetails.userImage" class="rounded-circle img-fluid" alt="Profile Image" style="width: 150px; height: 150px; object-fit: cover;">
+                }
+                @if(!userDetails.userImage){
+                  <img src="/assets/user_image.jpg" class="rounded-circle img-fluid" alt="Profile Image" style="width: 150px; height: 150px; object-fit: cover;">
+                }                
               </div>
               <div class="mb-4">
                 <label for="file-upload" class="btn btn-outline-primary">
@@ -65,49 +73,31 @@ import { Router } from '@angular/router';
                 <h3>Basic Information</h3>
               </div>
               <div class="card-body">
-                @if(isLoggedIn && userDetails){
-                  <ul class="list-group list-group-flush">
-                    <li class="list-group-item fs-4">
-                      <strong>Name:</strong> {{ userDetails.name }}
-                    </li>
-                    <li class="list-group-item fs-4">
-                      <strong>Email:</strong> {{ userDetails.email }}
-                    </li>
-                    <li class="list-group-item fs-4">
-                      <strong>Phone:</strong> {{ userDetails.phone }}
-                    </li>
-                    <li class="list-group-item fs-4">
-                      <strong>Country:</strong> {{ userDetails.addressDTO.country }}
-                    </li>
-                    <li class="list-group-item fs-4">
-                      <strong>City:</strong> {{ userDetails.addressDTO.city }}
-                    </li>
-                    <li class="list-group-item fs-4">
-                      <strong>Street Name:</strong> {{ userDetails.addressDTO.streetName }}
-                    </li>
-                  </ul>
-                }
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item fs-4">
+                    <strong>Name:</strong> {{ userDetails.name }}
+                  </li>
+                  <li class="list-group-item fs-4">
+                    <strong>Email:</strong> {{ userDetails.email }}
+                  </li>
+                  <li class="list-group-item fs-4">
+                    <strong>Phone:</strong> {{ userDetails.phone }}
+                  </li>
+                  <li class="list-group-item fs-4">
+                    <strong>Country:</strong> {{ userDetails.addressDTO.country }}
+                  </li>
+                  <li class="list-group-item fs-4">
+                    <strong>City:</strong> {{ userDetails.addressDTO.city }}
+                  </li>
+                  <li class="list-group-item fs-4">
+                    <strong>Street Name:</strong> {{ userDetails.addressDTO.streetName }}
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
           </div>
         </div>
-
-        <!-- <div>
-        <h2>Basic Information</h2>
-          
-          @if (isLoggedIn && userDetails) {
-            {{ userDetails.name }} 
-            {{ userDetails.email }} 
-            {{ userDetails.phone }} 
-            {{ userDetails.addressDTO.streetName }} 
-            {{ userDetails.addressDTO.city }} 
-            {{ userDetails.addressDTO.country }} 
-          }
-          @if(!isLoggedIn){
-            goHome();
-          }
-        </div> -->
       }
       @if(currentView === 'orders'){
         <div>
@@ -140,8 +130,9 @@ import { Router } from '@angular/router';
           <!-- saved payment methods -->
         </div>
       }
-
+    
     </div>
+    }
   </div>
 </div>
 
@@ -155,12 +146,14 @@ export class UserComponent {
   currentView: string = 'overview';
   userDetails!: UserDTO | null;
   isLoggedIn: boolean = false;
-  constructor(private router: Router, private authService: AuthService, private userService: UserService) {
+  constructor(private router: Router, private authService: AuthService, private userService: UserService, private http: HttpClient) {
     this.isLoggedIn = authService.isLoggedIn();
-    if (this.isLoggedIn)
+    if (this.isLoggedIn){
       this.fetchUserDetails();
+      console.log('image: ', this.userDetails?.userImage);
+      
+    }
     else {
-      console.log('redirected to home');
       this.router.navigate(['/home']);
     }
   }
@@ -186,17 +179,33 @@ export class UserComponent {
     this.router.navigate(['/home']);
   }
 
-  profileImageUrl: string | ArrayBuffer | null | undefined= null;
 
   onImageSelected(event: any) {
     const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        this.profileImageUrl = e.target?.result;
-      };
-      reader.readAsDataURL(file);
+
+    console.log(file);
+
+    const form = new FormData();
+    form.append('file', file);
+
+    let userId: string | null = '';
+    if (this.userDetails) {
+      userId = this.userDetails.id;
+      form.append('userId', userId!);
     }
+    
+
+    // send to server REST API
+    this.http.post('http://localhost:8080/files/user/upload', form, { responseType: 'text' }).subscribe(
+      (fileName: string) => { 
+        console.log(fileName);
+        this.userDetails!.userImage = fileName;
+      }, 
+      error => {
+        console.log('file loading error')
+      }
+    );
+
   }
 
 

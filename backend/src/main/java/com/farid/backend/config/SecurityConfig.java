@@ -38,6 +38,7 @@ public class SecurityConfig {
                         auth
                                 .requestMatchers("/user/register").permitAll()
                                 .requestMatchers("/user/login").permitAll()
+                                .requestMatchers("/images/**").permitAll()
                                 .requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
                                 .anyRequest().authenticated()
 
