@@ -30,8 +30,6 @@ public class Product {
     private String imageUrl;
     @Column(nullable = false)
     private int availableQuantity;
-    @OneToMany(mappedBy = "product")
-    private List<CartItem> cartItems = new ArrayList<>();
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
