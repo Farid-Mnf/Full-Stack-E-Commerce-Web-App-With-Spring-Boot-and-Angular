@@ -2,10 +2,13 @@ package com.farid.backend.service;
 
 import com.farid.backend.dto.CategoryDTO;
 import com.farid.backend.dto.ProductDTO;
+import com.farid.backend.dto.UserDTO;
 import com.farid.backend.entity.Category;
 import com.farid.backend.entity.Product;
+import com.farid.backend.entity.User;
 import com.farid.backend.repository.CategoryRepository;
 import com.farid.backend.repository.ProductRepository;
+import com.farid.backend.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +22,7 @@ import java.util.UUID;
 public class ProductService {
     private ProductRepository productRepository;
     private CategoryRepository categoryRepository;
+    private UserRepository userRepository;
 
     public List<ProductDTO> getAllProducts() {
         List<ProductDTO> productDTOS = new ArrayList<>();
@@ -36,7 +40,8 @@ public class ProductService {
 
     public ProductDTO addProduct(ProductDTO productDTO) {
         Optional<Category> categoryOptional = categoryRepository.findById(productDTO.getCategoryDTO().getId());
-        if(categoryOptional.isPresent()){
+        Optional<User> userOptional = userRepository.findById(productDTO.getUserDTO().getId());
+        if(categoryOptional.isPresent() && userOptional.isPresent()){
             Product product = productRepository.save(
                     Product.builder()
                             .description(productDTO.getDescription())
@@ -45,6 +50,7 @@ public class ProductService {
                             .imageUrl(productDTO.getImageUrl())
                             .category(categoryOptional.get())
                             .availableQuantity(productDTO.getAvailableQuantity())
+                            .seller(userOptional.get())
                             .build()
             );
             return productToProductDTO(product);
@@ -61,6 +67,14 @@ public class ProductService {
                 .description(product.getDescription())
                 .imageUrl(product.getImageUrl())
                 .availableQuantity(product.getAvailableQuantity())
+                .userDTO(
+                        UserDTO.builder()
+                                .name(product.getSeller().getName())
+                                .email(product.getSeller().getEmail())
+                                .phone(product.getSeller().getPhone())
+                                .id(product.getSeller().getId())
+                                .build()
+                )
                 .categoryDTO(
                         CategoryDTO.builder()
                                 .name(product.getCategory().getName())

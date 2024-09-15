@@ -16,4 +16,5 @@ public class ProductDTO {
     private String imageUrl;
     private int availableQuantity;
     private CategoryDTO categoryDTO;
+    private UserDTO userDTO;
 }
