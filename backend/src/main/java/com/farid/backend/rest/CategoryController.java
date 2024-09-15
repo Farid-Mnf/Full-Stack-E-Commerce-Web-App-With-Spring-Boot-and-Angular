@@ -5,7 +5,7 @@ import com.farid.backend.service.CategoryService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -17,8 +17,8 @@ public class CategoryController {
     public CategoryDTO addCategory(@RequestBody CategoryDTO categoryDTO){
         return categoryService.addCategory(categoryDTO);
     }
-    @GetMapping("/{id}")
-    public CategoryDTO getCategory(@PathVariable UUID id){
-        return categoryService.getCategory(id);
+    @GetMapping
+    public List<CategoryDTO> getCategory(){
+        return categoryService.getAllCategories();
     }
 }
