@@ -82,4 +82,14 @@ public class ProductService {
                                 .build()
                 ).build();
     }
+
+    public List<ProductDTO> getAllUserProducts(UUID userId) {
+        List<Product> products = productRepository.getProductsBySellerId(userId);
+        List<ProductDTO> productDTOS = new ArrayList<>();
+        products.forEach(product -> {
+            productDTOS.add(productToProductDTO(product));
+        });
+
+        return productDTOS;
+    }
 }

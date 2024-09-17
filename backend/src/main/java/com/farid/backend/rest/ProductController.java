@@ -26,6 +26,10 @@ public class ProductController {
     public List<ProductDTO> getAllProducts(){
         return productService.getAllProducts();
     }
+    @GetMapping("/user/{id}")
+    public List<ProductDTO> getAllUserProducts(@PathVariable("id") UUID userId){
+        return productService.getAllUserProducts(userId);
+    }
     @GetMapping("/{id}")
     public ProductDTO getProduct(@PathVariable UUID id){
         return productService.getProductById(id);

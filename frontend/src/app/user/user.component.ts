@@ -8,6 +8,7 @@ import { FormGroup,FormControl, ReactiveFormsModule } from '@angular/forms';
 import { CategoryDTO } from '../model/CategoryDTO';
 import { ProductService } from '../service/product.service';
 import { NgIf } from '@angular/common';
+import { ProductDTO } from '../model/ProductDTO';
 
 @Component({
   selector: 'app-user',
@@ -232,47 +233,24 @@ import { NgIf } from '@angular/common';
             </div>
             <div class="card-body" style="background-color: lightgray;">
               <div class="row">
-                <!-- Product 1 -->
-                <div class="col-md-4 mb-4">
-                  <div class="card h-100">
-                    <img src="https://via.placeholder.com/150" class="card-img-top" alt="Product 1">
-                    <div class="card-body text-center">
-                      <h5 class="card-title">Product 1</h5>
-                      <p class="card-text"><i class="fas fa-dollar-sign"></i> Price: $100</p>
-                      <button class="btn btn-info">
-                        <i class="fas fa-eye"></i> View Status
-                      </button>
+                @if(userProducts.length === 0){
+                  <p class="text-center">you have no products published yet! ..... </p>
+                }
+                
+                @for (product of userProducts; track product.id) {
+                  <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                      <img [src]="'http://localhost:8080/images/' + product.imageUrl" class="card-img-top" alt="Product 1">
+                      <div class="card-body text-center">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text"><i class="fas fa-dollar-sign"></i> Price: $ {{product.price}}</p>
+                        <button class="btn btn-info">
+                          <i class="fas fa-eye"></i> View Status
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-
-                <!-- Product 2 -->
-                <div class="col-md-4 mb-4">
-                  <div class="card h-100">
-                    <img src="https://via.placeholder.com/150" class="card-img-top" alt="Product 2">
-                    <div class="card-body text-center">
-                      <h5 class="card-title">Product 2</h5>
-                      <p class="card-text"><i class="fas fa-dollar-sign"></i> Price: $200</p>
-                      <button class="btn btn-info">
-                        <i class="fas fa-eye"></i> View Status
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Product 3 -->
-                <div class="col-md-4 mb-4">
-                  <div class="card h-100">
-                    <img src="https://via.placeholder.com/150" class="card-img-top" alt="Product 3">
-                    <div class="card-body text-center">
-                      <h5 class="card-title">Product 3</h5>
-                      <p class="card-text"><i class="fas fa-dollar-sign"></i> Price: $150</p>
-                      <button class="btn btn-info">
-                        <i class="fas fa-eye"></i> View Status
-                      </button>
-                    </div>
-                  </div>
-                </div>
+                }
               </div>
             </div>
           </div>
@@ -307,6 +285,7 @@ export class UserComponent {
   userDetails!: UserDTO | null;
   isLoggedIn: boolean = false;
   categories: CategoryDTO[] = [];
+  userProducts: ProductDTO[] = [];
   newProduct: FormGroup = new FormGroup({
     name: new FormControl(''),
     description: new FormControl(''),
@@ -320,18 +299,18 @@ export class UserComponent {
     if (this.isLoggedIn){
       this.fetchUserDetails();
       this.getAllCategories();
+      this.getUserProducts();
     }
     else {
       this.router.navigate(['/home']);
     }
   }
 
+
   fetchUserDetails() {
     this.userService.getUser()?.subscribe(
       (userDTO: UserDTO) => {
         this.userDetails = userDTO; // Assign the response to `userDetails`
-        console.log(this.userDetails);
-        console.log('image: ', this.userDetails?.userImage);
       },
       (error) => {
         console.error('Error fetching user details:', error);
@@ -342,6 +321,12 @@ export class UserComponent {
   getAllCategories(){
     return this.productService.getAllCategories().subscribe((data) => {
       this.categories = data;
+    });
+  }
+
+  getUserProducts(){
+    return this.productService.getAllUserProducts().subscribe((data) => {
+      this.userProducts = data;
     });
   }
 
@@ -416,6 +401,7 @@ export class UserComponent {
         console.log(response);
         this.showModal = true; // Show modal after success
         this.newProduct.reset();
+        this.getUserProducts();
       }
     )
   }
