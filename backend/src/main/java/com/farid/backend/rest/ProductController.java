@@ -35,6 +35,10 @@ public class ProductController {
     public List<ProductDTO> getFeaturedProducts(){
         return productService.getFeaturedProducts();
     }
+    @GetMapping("/trending")
+    public List<ProductDTO> getTrendingProducts(){
+        return productService.getTrendingProducts();
+    }
 
     @GetMapping("/user/{id}")
     public List<ProductDTO> getAllUserProducts(@PathVariable("id") UUID userId){

@@ -37,8 +37,11 @@ export class ProductService {
     return this.http.get<ProductDTO[]>(this.productAPI + '/featured');
   }
 
-  addProductToCart(productId: string) {
+  getTrendingProducts(): Observable<ProductDTO[]> {
+    return this.http.get<ProductDTO[]>(this.productAPI + '/trending');
+  }
 
+  addProductToCart(productId: string) {
     const userId: string = this.authService.getUserId();
     const quantity = 1;
 

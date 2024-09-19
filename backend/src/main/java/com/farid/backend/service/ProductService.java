@@ -11,6 +11,7 @@ import com.farid.backend.repository.ProductRepository;
 import com.farid.backend.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -97,6 +98,11 @@ public class ProductService {
 
     public List<ProductDTO> getFeaturedProducts() {
         return productRepository.findAll(Pageable.ofSize(4))
+                .stream().map(this::productToProductDTO).collect(Collectors.toList());
+    }
+
+    public List<ProductDTO> getTrendingProducts() {
+        return productRepository.findProductByDescriptionContains("Trending", Pageable.ofSize(4))
                 .stream().map(this::productToProductDTO).collect(Collectors.toList());
     }
 }
