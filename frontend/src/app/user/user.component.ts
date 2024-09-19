@@ -9,22 +9,23 @@ import { CategoryDTO } from '../model/CategoryDTO';
 import { ProductService } from '../service/product.service';
 import { NgIf } from '@angular/common';
 import { ProductDTO } from '../model/ProductDTO';
+import { HeaderComponent } from "../header/header.component";
 
 @Component({
   selector: 'app-user',
   standalone: true,
-  imports: [ReactiveFormsModule, NgIf],
+  imports: [ReactiveFormsModule, NgIf, HeaderComponent],
   template: `
-<!-- @if(!isLoggedIn){
-  {{ goHome() }}
-} -->
 <div class="container-fluid">
+  <my-header></my-header>
+  <div class="spacer">
+    &nbsp;
+</div>
   <div class="row">
-    
     <!-- Left Side Panel -->
     <div class="col-md-3" style="min-height: 100vh;background-color:#d7d7d7">
       <ul class="nav flex-column p-3">
-        <button class="btn btn-dark mb-4 w-50" (click)="goHome()"><i class="fa-solid fa-house"></i> Home</button>
+        <!-- <button class="btn btn-dark mb-4 w-50" (click)="goHome()"><i class="fa-solid fa-house"></i> Home</button> -->
         <!-- Basic Info -->
         <li class="nav-item">
           <a class="nav-link active" [class]="{'active': currentView === 'overview'}" (click)="setView('overview')"><i class="fas fa-user-circle"></i> Basic Info</a>
@@ -236,14 +237,14 @@ import { ProductDTO } from '../model/ProductDTO';
                 @if(userProducts.length === 0){
                   <p class="text-center">you have no products published yet! ..... </p>
                 }
-                
+                <!-- List of products -->
                 @for (product of userProducts; track product.id) {
                   <div class="col-md-4 mb-4">
                     <div class="card h-100">
                       <img [src]="'http://localhost:8080/images/' + product.imageUrl" class="card-img-top" alt="Product 1">
                       <div class="card-body text-center">
                         <h5 class="card-title">{{ product.name }}</h5>
-                        <p class="card-text"><i class="fas fa-dollar-sign"></i> Price: $ {{product.price}}</p>
+                        <p class="card-text"><i class="fas fa-dollar-sign"></i> Price: $<span class="fw-bold fs-4">{{product.price}}</span></p>
                         <button class="btn btn-info">
                           <i class="fas fa-eye"></i> View Status
                         </button>
@@ -255,7 +256,6 @@ import { ProductDTO } from '../model/ProductDTO';
             </div>
           </div>
         </div>
-
       }
 
       @if(currentView === 'payment'){

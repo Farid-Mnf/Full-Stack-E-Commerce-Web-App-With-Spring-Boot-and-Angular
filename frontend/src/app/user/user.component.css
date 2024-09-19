@@ -37,3 +37,7 @@
   .user-info-list li{
     background-color: lightgray !important
   }
+
+  .spacer{
+    height: 56px;
+  }
