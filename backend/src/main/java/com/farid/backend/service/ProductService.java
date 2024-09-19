@@ -10,12 +10,14 @@ import com.farid.backend.repository.CategoryRepository;
 import com.farid.backend.repository.ProductRepository;
 import com.farid.backend.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -91,5 +93,10 @@ public class ProductService {
         });
 
         return productDTOS;
+    }
+
+    public List<ProductDTO> getFeaturedProducts() {
+        return productRepository.findAll(Pageable.ofSize(4))
+                .stream().map(this::productToProductDTO).collect(Collectors.toList());
     }
 }

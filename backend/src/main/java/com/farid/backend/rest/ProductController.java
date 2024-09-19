@@ -1,9 +1,13 @@
 package com.farid.backend.rest;
 
+import com.farid.backend.dto.CartProduct;
 import com.farid.backend.dto.CategoryDTO;
 import com.farid.backend.dto.ProductDTO;
 import com.farid.backend.dto.UserDTO;
-import com.farid.backend.entity.Product;
+import com.farid.backend.entity.Cart;
+import com.farid.backend.entity.CartItem;
+import com.farid.backend.entity.User;
+import com.farid.backend.repository.UserRepository;
 import com.farid.backend.service.FileSaverService;
 import com.farid.backend.service.ProductService;
 import lombok.AllArgsConstructor;
@@ -14,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -26,6 +31,11 @@ public class ProductController {
     public List<ProductDTO> getAllProducts(){
         return productService.getAllProducts();
     }
+    @GetMapping("/featured")
+    public List<ProductDTO> getFeaturedProducts(){
+        return productService.getFeaturedProducts();
+    }
+
     @GetMapping("/user/{id}")
     public List<ProductDTO> getAllUserProducts(@PathVariable("id") UUID userId){
         return productService.getAllUserProducts(userId);

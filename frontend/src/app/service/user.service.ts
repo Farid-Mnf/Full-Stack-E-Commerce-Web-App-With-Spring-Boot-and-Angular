@@ -19,6 +19,7 @@ export class UserService {
     return null;
   }
   getUserId(){
-    return this.authService.getUserDetails().userId;
+    return this.authService.getUserId();
   }
+  
 }

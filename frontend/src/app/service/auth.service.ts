@@ -34,6 +34,10 @@ export class AuthService {
     return null;
   }
 
+  getUserId(){
+    return this.getUserDetails().userId;
+  }
+
   isLoggedIn(): boolean {
     const token = this.getToken();
     if(token === null) return false;

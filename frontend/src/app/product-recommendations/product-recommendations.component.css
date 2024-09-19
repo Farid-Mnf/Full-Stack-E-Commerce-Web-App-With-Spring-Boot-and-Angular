@@ -2,3 +2,7 @@
     height: 150px;
     object-fit: cover;
 }
+
+.shade {
+    box-shadow: #afaf95 0px 0px 10px 2px; 
+}

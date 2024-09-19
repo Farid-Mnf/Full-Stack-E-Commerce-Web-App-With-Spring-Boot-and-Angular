@@ -23,9 +23,7 @@ import { AuthService } from '../service/auth.service';
 })
 export class HomeComponent {
   constructor(private authService: AuthService){
-    this.jwtToken = authService.getToken();
-    console.log("Current Token: " + this.jwtToken);
-    
+    this.jwtToken = authService.getToken();    
   }
   jwtToken: string | null = '';
   

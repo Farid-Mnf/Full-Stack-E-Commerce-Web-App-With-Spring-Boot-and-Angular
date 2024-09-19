@@ -26,7 +26,7 @@ public class Order {
     private LocalDateTime date;
     private LocalDateTime shippingDate;
     private OrderStatus status;
-   @ManyToOne
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
