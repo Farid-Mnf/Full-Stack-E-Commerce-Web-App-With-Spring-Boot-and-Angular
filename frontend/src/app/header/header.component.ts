@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { UserService } from '../service/user.service';
 import { UserDTO } from '../model/UserDTO';
 import { AuthService } from '../service/auth.service';
+import { SharedService } from '../service/shared.service';
 @Component({
     selector: 'my-header',
     standalone: true,
@@ -33,7 +34,12 @@ import { AuthService } from '../service/auth.service';
                   @if (isLoggedIn){
                         <li class="nav-item">
                         <a class="nav-link text-light" href="#">
-                        <i class="fa-solid fa-cart-shopping"></i>
+                            @if(cartAlert){
+                                <i class="fa-solid fa-cart-arrow-down" style="color: yellow;"></i>
+                            }
+                            @if(!cartAlert){
+                                <i class="fa-solid fa-cart-shopping"></i>
+                            }
                         </a>
                         </li>
                         <li class="nav-item">
@@ -55,10 +61,15 @@ export class HeaderComponent {
 
     userDetails!: UserDTO | null;
     isLoggedIn: boolean = false;
-    constructor(private authService: AuthService, private userService: UserService){
+    cartAlert: boolean = false;
+
+    constructor(private authService: AuthService, private userService: UserService, private sharedService: SharedService){
         this.isLoggedIn = authService.isLoggedIn();
         if(this.isLoggedIn)
             this.fetchUserDetails();
+        this.sharedService.headerValue$.subscribe((data) => {
+            this.cartAlert = data;
+        })
     }
 
     fetchUserDetails() {

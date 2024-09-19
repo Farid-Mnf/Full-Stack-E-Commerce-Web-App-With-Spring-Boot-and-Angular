@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ProductDTO } from '../model/ProductDTO';
 import { ProductService } from '../service/product.service';
 import { AuthService } from '../service/auth.service';
 import { Router, RouterLink } from '@angular/router';
+import { HeaderComponent } from '../header/header.component';
+import { SharedService } from '../service/shared.service';
 
 @Component({
   selector: 'featured-products',
@@ -37,12 +39,12 @@ import { Router, RouterLink } from '@angular/router';
 export class FeaturedProductsComponent {
     isLoggedIn: boolean = false;
     featuredProducts: ProductDTO[] = [];
+
     
 
-    constructor(private productService: ProductService, private authService: AuthService, private router: Router){
+    constructor(private productService: ProductService, private authService: AuthService, private router: Router, private sharedService: SharedService){
         this.getFeaturedProducts();
         this.isLoggedIn = authService.isLoggedIn();
-
     }
 
     getFeaturedProducts() {
@@ -53,7 +55,12 @@ export class FeaturedProductsComponent {
 
     addToCart(productId: string, event: MouseEvent){
         if(!this.isLoggedIn) this.router.navigate(['/login']);
-        else this.productService.addProductToCart(productId);
+        else{
+            this.productService.addProductToCart(productId);
+            const button = event.target as HTMLButtonElement;
+            button.innerHTML = '<i class="fas fa-check-double"></i> Added to Cart';
+            this.sharedService.updateHeaderValue(true);
+        }
     }
 }
 
