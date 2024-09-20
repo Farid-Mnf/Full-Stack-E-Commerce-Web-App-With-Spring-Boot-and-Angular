@@ -14,10 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -97,7 +94,7 @@ public class ProductService {
     }
 
     public List<ProductDTO> getFeaturedProducts() {
-        return productRepository.findAll(Pageable.ofSize(4))
+        return productRepository.findAllByOrderByAvailableQuantityDesc(Pageable.ofSize(4))
                 .stream().map(this::productToProductDTO).collect(Collectors.toList());
     }
 

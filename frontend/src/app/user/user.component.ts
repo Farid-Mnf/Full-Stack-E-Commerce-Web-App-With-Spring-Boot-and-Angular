@@ -241,7 +241,7 @@ import { HeaderComponent } from "../header/header.component";
                 @for (product of userProducts; track product.id) {
                   <div class="col-md-4 mb-4">
                     <div class="card h-100">
-                      <img [src]="'http://localhost:8080/images/' + product.imageUrl" class="card-img-top" alt="Product 1">
+                      <img [src]="'http://localhost:8080/images/' + product.imageUrl" class="card-img-top image-resize" alt="Product 1">
                       <div class="card-body text-center">
                         <h5 class="card-title">{{ product.name }}</h5>
                         <p class="card-text"><i class="fas fa-dollar-sign"></i> Price: $<span class="fw-bold fs-4">{{product.price}}</span></p>

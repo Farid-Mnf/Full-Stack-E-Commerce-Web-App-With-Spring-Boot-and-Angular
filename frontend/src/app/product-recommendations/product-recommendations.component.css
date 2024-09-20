@@ -1,6 +1,6 @@
 .product-img {
     height: 150px;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 .shade {

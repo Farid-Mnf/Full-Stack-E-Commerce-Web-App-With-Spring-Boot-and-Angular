@@ -41,3 +41,9 @@
   .spacer{
     height: 56px;
   }
+
+  .image-resize{
+    max-width: 400px;
+    max-height: 230px;
+    object-fit: contain;
+  }
