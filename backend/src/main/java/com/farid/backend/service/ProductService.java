@@ -1,6 +1,7 @@
 package com.farid.backend.service;
 
 import com.farid.backend.dto.CategoryDTO;
+import com.farid.backend.dto.FilterDTO;
 import com.farid.backend.dto.ProductDTO;
 import com.farid.backend.dto.UserDTO;
 import com.farid.backend.entity.Category;
@@ -100,6 +101,16 @@ public class ProductService {
 
     public List<ProductDTO> getTrendingProducts() {
         return productRepository.findProductByDescriptionContains("Trending", Pageable.ofSize(4))
+                .stream().map(this::productToProductDTO).collect(Collectors.toList());
+    }
+
+    public List<ProductDTO> getFilteredProducts(FilterDTO filterDTO) {
+        System.out.println("category: " + filterDTO.getCategory());
+        System.out.println("price range: " + filterDTO.getPriceRange());
+        System.out.println("in stock: " + filterDTO.getInStock());
+
+        return productRepository.findAllByCategoryId(
+                UUID.fromString(filterDTO.getCategory()), Pageable.ofSize(4))
                 .stream().map(this::productToProductDTO).collect(Collectors.toList());
     }
 }

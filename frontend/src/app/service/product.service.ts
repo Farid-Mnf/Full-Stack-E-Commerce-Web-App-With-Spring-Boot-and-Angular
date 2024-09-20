@@ -5,6 +5,7 @@ import { CategoryDTO } from '../model/CategoryDTO';
 import { UserService } from './user.service';
 import { ProductDTO } from '../model/ProductDTO';
 import { AuthService } from './auth.service';
+import { FilterDTO } from '../model/FilterDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +32,10 @@ export class ProductService {
     console.log('user id: ', userId);
 
     return this.http.get<ProductDTO[]>(this.productAPI + '/user/' + userId);
+  }
+
+  getFilteredProducts(filterDTO: FilterDTO): Observable<ProductDTO[]> {
+    return this.http.post<ProductDTO[]>(this.productAPI + '/filter', filterDTO);
   }
   
   getFeaturedProducts(): Observable<ProductDTO[]> {

@@ -1,9 +1,6 @@
 package com.farid.backend.rest;
 
-import com.farid.backend.dto.CartProduct;
-import com.farid.backend.dto.CategoryDTO;
-import com.farid.backend.dto.ProductDTO;
-import com.farid.backend.dto.UserDTO;
+import com.farid.backend.dto.*;
 import com.farid.backend.entity.Cart;
 import com.farid.backend.entity.CartItem;
 import com.farid.backend.entity.User;
@@ -40,6 +37,16 @@ public class ProductController {
         return productService.getTrendingProducts();
     }
 
+    @PostMapping("/filter")
+    public List<ProductDTO> getFilteredProducts(@RequestBody FilterDTO filterDTO){
+        List<ProductDTO> productDTOS = productService.getFilteredProducts(filterDTO);
+        productDTOS.forEach(product -> {
+            System.out.println(product.getName());
+            System.out.println(product.getDescription());
+            System.out.println(product.getCategoryDTO().getName());
+        });
+        return productDTOS;
+    }
     @GetMapping("/user/{id}")
     public List<ProductDTO> getAllUserProducts(@PathVariable("id") UUID userId){
         return productService.getAllUserProducts(userId);

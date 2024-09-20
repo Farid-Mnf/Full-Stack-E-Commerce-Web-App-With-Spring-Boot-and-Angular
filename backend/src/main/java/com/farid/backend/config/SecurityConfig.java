@@ -40,6 +40,9 @@ public class SecurityConfig {
                                 .requestMatchers("/user/login").permitAll()
                                 .requestMatchers("/images/**").permitAll()
                                 .requestMatchers("/product/featured").permitAll()
+                                .requestMatchers("/product/trending").permitAll()
+                                .requestMatchers("/product/filter").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/category").permitAll()
                                 .requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
                                 .anyRequest().authenticated()
 
