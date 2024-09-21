@@ -12,11 +12,13 @@ import com.farid.backend.repository.ProductRepository;
 import com.farid.backend.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -106,22 +108,33 @@ public class ProductService {
     }
 
     public List<ProductDTO> getFilteredProducts(FilterDTO filterDTO) {
-        List<ProductDTO> productDTOS;
         if(filterDTO.getPriceRange().compareTo(BigDecimal.valueOf(3000)) != 0){
-            productDTOS = productRepository.findAllByCategoryIdAndPriceIsLessThanEqual(
+            if(filterDTO.getInStock()){
+                return productRepository.findAllByCategoryIdAndPriceIsLessThanEqualAndAvailableQuantityGreaterThan(
+                        UUID.fromString(filterDTO.getCategory()),
+                        filterDTO.getPriceRange(),
+                        0,
+                        Pageable.ofSize(4)
+                ).stream().map(this::productToProductDTO).toList();
+            }
+            return productRepository.findAllByCategoryIdAndPriceIsLessThanEqual(
                     UUID.fromString(filterDTO.getCategory()),
                             filterDTO.getPriceRange(),
                             Pageable.ofSize(4))
                     .stream().map(this::productToProductDTO).toList();
 
         }else{
-             productDTOS = productRepository.findAllByCategoryId(
+            if(filterDTO.getInStock()) {
+
+                return productRepository.findAllByCategoryIdAndAvailableQuantityGreaterThan(
+                                UUID.fromString(filterDTO.getCategory()),
+                                0,
+                                Pageable.ofSize(4))
+                        .stream().map(this::productToProductDTO).toList();
+            }
+             return productRepository.findAllByCategoryId(
                             UUID.fromString(filterDTO.getCategory()), Pageable.ofSize(4))
                     .stream().map(this::productToProductDTO).toList();
-
         }
-        if(filterDTO.getInStock())
-            return productDTOS.stream().filter(productDTO -> productDTO.getAvailableQuantity() != 0).collect(Collectors.toList());
-        return productDTOS;
     }
 }

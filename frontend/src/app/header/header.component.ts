@@ -76,7 +76,6 @@ export class HeaderComponent {
         this.userService.getUser()?.subscribe(
             (userDTO: UserDTO) => {
                 this.userDetails = userDTO; // Assign the response to `userDetails`
-                console.log(this.userDetails);
             },
             (error) => {
                 console.error('Error fetching user details:', error);

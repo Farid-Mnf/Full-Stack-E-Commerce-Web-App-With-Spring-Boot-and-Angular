@@ -1,10 +1,11 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { HeaderComponent } from "../header/header.component";
 import { CategoryDTO } from '../model/CategoryDTO';
 import { ProductService } from '../service/product.service';
 import { FormGroup,FormControl, ReactiveFormsModule } from '@angular/forms';
 import { FilterDTO } from '../model/FilterDTO';
 import { ProductDTO } from '../model/ProductDTO';
+import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-product-list',
   standalone: true,
@@ -18,8 +19,8 @@ import { ProductDTO } from '../model/ProductDTO';
     <div class="row">
       <!-- Left Sidebar for Filters -->
       <div class="col-md-3">
-          <form [formGroup]="filters" (submit)="applyFilter()">
-          <div class="card p-3 shadow-sm">
+          <form [formGroup]="filters" (submit)="applyFilter(categoryDTO?.id || null)">
+          <div class="card p-3 shadow">
             <h5 class="mb-3">Filters</h5>
             <!-- Category Filter -->
             <div class="mb-3">
@@ -27,10 +28,10 @@ import { ProductDTO } from '../model/ProductDTO';
                 <i class="fas fa-list"></i> Category
               </label>
               <select formControlName="category" class="form-select" id="category">
-                <option value="">Select a category</option>
-                @for (category of categories; track category.id) {
-                  <option [value]="category.id">{{category.name}}</option>
-                }
+                  <option  [value]="categoryDTO?.id">Choose ...</option>
+                  @for (category of categories; track category.id) {
+                    <option [value]="category.id">{{category.name}}</option>
+                  }
               </select>
             </div>
             <div class="mb-3">
@@ -41,18 +42,6 @@ import { ProductDTO } from '../model/ProductDTO';
               <p class="text-muted" #priceRangeText>0 - 1000</p>
             </div>
 
-            <!-- Brand Filter -->
-            <!-- <div class="mb-3">
-              <label for="brand" class="form-label">
-                <i class="fas fa-industry"></i> Brand
-              </label>
-              <select class="form-select" id="brand">
-                <option selected>Choose...</option>
-                <option value="1">Brand A</option>
-                <option value="2">Brand B</option>
-                <option value="3">Brand C</option>
-              </select>
-            </div> -->
             <!-- Availability Filter -->
             <div class="mb-3 form-check">
               <input formControlName="inStock" type="checkbox" class="form-check-input" id="in-stock">
@@ -74,7 +63,7 @@ import { ProductDTO } from '../model/ProductDTO';
           <!-- Repeat this product card block for each product -->
           @for (product of productsFiltered; track product.id) {
           <div class="col-md-12 mb-3">
-            <div class="card p-3 shadow-sm">
+            <div class="card p-3 shadow">
               <div class="row g-0">
                 <!-- Product Image -->
                 <div class="col-md-3">
@@ -138,33 +127,44 @@ export class ProductListComponent {
   productsFiltered: ProductDTO[] = [];
   @ViewChild('priceRangeText') priceRangeText!: ElementRef;
 
+  parameter: string = '';
+  categoryDTO: CategoryDTO | null = null;
+
   filters: FormGroup = new FormGroup({
-    category: new FormControl(''),
+    category: new FormControl(this.categoryDTO?.id),
     priceRange: new FormControl(3000),
     inStock: new FormControl(false)
   });
+  
+  constructor(private productService: ProductService, private route: ActivatedRoute){
+    this.getAllCategories().subscribe((data) => {
+      this.categories = data;
+      this.parameter = this.route.snapshot.paramMap.get('parameter') || '';
+      console.log('parameter: ', this.parameter);
+      this.handleAppropriateParameterAction(this.parameter);
+    });;
+  }
 
-  
-  
-  constructor(private productService: ProductService){
-    this.getAllCategories();
+  handleAppropriateParameterAction(parameter: string){
+    this.categories.forEach(categoryDTO => {
+      if(categoryDTO.name.toLowerCase() === parameter.toLowerCase()){
+        this.categoryDTO = categoryDTO;
+        this.applyFilter(categoryDTO.id);
+      }
+    })
   }
   
   getAllCategories(){
-    return this.productService.getAllCategories().subscribe((data) => {
-      this.categories = data;
-    });
+    return this.productService.getAllCategories();
   }
   
-  applyFilter() {
+  applyFilter(category: string | null) {
     const filterDTO = new FilterDTO(
-      this.filters.get('category')?.value, 
+      this.filters.get('category')?.value || category, 
       this.filters.get('priceRange')?.value, 
       this.filters.get('inStock')?.value);
-
+            
       this.productService.getFilteredProducts(filterDTO).subscribe(data => {
-        console.log(data);
-        
         this.productsFiltered = data;
       });
   }

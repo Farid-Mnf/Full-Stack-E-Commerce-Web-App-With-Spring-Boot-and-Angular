@@ -27,7 +27,6 @@ export class AuthService {
 
   getUserDetails() {
     const token = this.getToken();
-    console.log("getUserDetials token : " + token);
     if (token) {
       return this.jwtHelper.decodeToken(token);
     }

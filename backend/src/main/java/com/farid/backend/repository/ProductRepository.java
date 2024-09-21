@@ -17,4 +17,6 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
     Page<Product> findAllByOrderByAvailableQuantityDesc(Pageable pageable);
     Page<Product> findAllByCategoryId(UUID categoryId, Pageable pageable);
     Page<Product> findAllByCategoryIdAndPriceIsLessThanEqual(UUID categoryId, BigDecimal price, Pageable pageable);
+    Page<Product> findAllByCategoryIdAndAvailableQuantityGreaterThan(UUID categoryId, int availableQuantity, Pageable pageable);
+    Page<Product> findAllByCategoryIdAndPriceIsLessThanEqualAndAvailableQuantityGreaterThan(UUID categoryId, BigDecimal price, int availableQuantity, Pageable pageable);
 }

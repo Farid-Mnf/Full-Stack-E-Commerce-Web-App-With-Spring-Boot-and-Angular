@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router'
+
 
 @Component({
   selector: 'categories',
   standalone: true,
-  imports: [],
+  imports: [RouterLink],
   template: `
     <!-- Categories Section -->
     <div class="container my-5">
@@ -25,7 +27,7 @@ import { Component } from '@angular/core';
                     <div class="card-body">
                         <h5 class="card-title">Fashion</h5>
                         <p class="card-text">Discover the latest trends in fashion.</p>
-                        <a href="#" class="btn btn-primary">Shop Now</a>
+                        <a [routerLink]="['/listproducts', 'clothes']" class="btn btn-primary">Shop Now</a>
                     </div>
                 </div>
             </div>
@@ -35,7 +37,7 @@ import { Component } from '@angular/core';
                     <div class="card-body ">
                         <h5 class="card-title">Computers</h5>
                         <p class="card-text">Upgrade your computer.</p>
-                        <a href="#" class="btn btn-primary">Shop Now</a>
+                        <a [routerLink]="['/listproducts', 'computers']" class="btn btn-primary">Shop Now</a>
                     </div>
                 </div>
             </div>

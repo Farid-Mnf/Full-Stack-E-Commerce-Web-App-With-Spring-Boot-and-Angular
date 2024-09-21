@@ -22,11 +22,5 @@ import { AuthService } from '../service/auth.service';
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
-  constructor(private authService: AuthService){
-    this.jwtToken = authService.getToken();    
-  }
-  jwtToken: string | null = '';
-  
-
   
 }

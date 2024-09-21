@@ -29,7 +29,7 @@ export const routes: Routes = [
         title: 'Account'
     },
     {
-        path: 'listproducts',
+        path: 'listproducts/:parameter',
         component: ProductListComponent,
         title: 'Products'
     },
