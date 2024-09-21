@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -105,12 +106,22 @@ public class ProductService {
     }
 
     public List<ProductDTO> getFilteredProducts(FilterDTO filterDTO) {
-        System.out.println("category: " + filterDTO.getCategory());
-        System.out.println("price range: " + filterDTO.getPriceRange());
-        System.out.println("in stock: " + filterDTO.getInStock());
+        List<ProductDTO> productDTOS;
+        if(filterDTO.getPriceRange().compareTo(BigDecimal.valueOf(3000)) != 0){
+            productDTOS = productRepository.findAllByCategoryIdAndPriceIsLessThanEqual(
+                    UUID.fromString(filterDTO.getCategory()),
+                            filterDTO.getPriceRange(),
+                            Pageable.ofSize(4))
+                    .stream().map(this::productToProductDTO).toList();
 
-        return productRepository.findAllByCategoryId(
-                UUID.fromString(filterDTO.getCategory()), Pageable.ofSize(4))
-                .stream().map(this::productToProductDTO).collect(Collectors.toList());
+        }else{
+             productDTOS = productRepository.findAllByCategoryId(
+                            UUID.fromString(filterDTO.getCategory()), Pageable.ofSize(4))
+                    .stream().map(this::productToProductDTO).toList();
+
+        }
+        if(filterDTO.getInStock())
+            return productDTOS.stream().filter(productDTO -> productDTO.getAvailableQuantity() != 0).collect(Collectors.toList());
+        return productDTOS;
     }
 }

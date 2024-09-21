@@ -37,7 +37,7 @@ import { ProductDTO } from '../model/ProductDTO';
               <label for="price-range" class="form-label">
                 <i class="fas fa-dollar-sign"></i> Price Range
               </label>
-              <input formControlName="priceRange" type="range" class="form-range" id="price-range" min="0" max="10000" (change)="onRangeChange($event)">
+              <input formControlName="priceRange" type="range" class="form-range" id="price-range" min="0" max="50000" (change)="onRangeChange($event)">
               <p class="text-muted" #priceRangeText>0 - 1000</p>
             </div>
 
@@ -95,9 +95,16 @@ import { ProductDTO } from '../model/ProductDTO';
                         <i class="fas fa-tag"></i> $<span>{{ product.price }}</span>
                       </p>
                       <!-- Available Quantity in Stock -->
-                      <p class="card-text text-muted mb-1">
-                        <i class="fas fa-box-open"></i> <span style="color: green;"> In Stock</span>
-                      </p>
+                      @if (product.availableQuantity === 0) {
+                        <p class="card-text text-muted mb-1">
+                          <i class="fas fa-box-open"></i> <span style="color: red;"> Out of Stock</span>
+                        </p>
+                      }
+                      @if(product.availableQuantity > 0){
+                        <p class="card-text text-muted mb-1">
+                          <i class="fas fa-box-open"></i> <span style="color: green;"> In Stock</span>
+                        </p>
+                      }
                       <!-- Seller Profile Link -->
                       <p class="mb-1">
                         Sold by:
