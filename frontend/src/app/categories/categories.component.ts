@@ -17,7 +17,7 @@ import { RouterLink } from '@angular/router'
                     <div class="card-body">
                         <h5 class="card-title">Electronics</h5>
                         <p class="card-text">Shop the latest electronic devices and gadgets.</p>
-                        <a href="#" class="btn btn-primary">Shop Now</a>
+                        <a [routerLink]="['/listproducts', 'electronics']" class="btn btn-primary">Shop Now</a>
                     </div>
                 </div>
             </div>
