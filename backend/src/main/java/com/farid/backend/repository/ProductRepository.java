@@ -15,8 +15,11 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
     List<Product> getProductsBySellerId(UUID id);
     List<Product> findProductByDescriptionContains(String value, Pageable pageable);
     Page<Product> findAllByOrderByAvailableQuantityDesc(Pageable pageable);
-    Page<Product> findAllByCategoryId(UUID categoryId, Pageable pageable);
-    Page<Product> findAllByCategoryIdAndPriceIsLessThanEqual(UUID categoryId, BigDecimal price, Pageable pageable);
-    Page<Product> findAllByCategoryIdAndAvailableQuantityGreaterThan(UUID categoryId, int availableQuantity, Pageable pageable);
-    Page<Product> findAllByCategoryIdAndPriceIsLessThanEqualAndAvailableQuantityGreaterThan(UUID categoryId, BigDecimal price, int availableQuantity, Pageable pageable);
+    Page<Product> findAllByCategoryIdOrNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(
+            UUID categoryId, String name, String description, Pageable pageable);
+    Page<Product> findAllByCategoryIdAndPriceIsLessThanEqualOrNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(
+            UUID categoryId, BigDecimal price, String name, String description, Pageable pageable);
+    Page<Product> findAllByCategoryIdAndAvailableQuantityGreaterThanOrNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(
+            UUID categoryId, int availableQuantity, String name, String description, Pageable pageable);
+    Page<Product> findAllByCategoryIdAndPriceIsLessThanEqualAndAvailableQuantityGreaterThanOrNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(UUID categoryId, BigDecimal price, int availableQuantity, String name, String description,Pageable pageable);
 }

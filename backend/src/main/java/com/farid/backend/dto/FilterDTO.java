@@ -9,4 +9,5 @@ public class FilterDTO {
     private String Category;
     private BigDecimal priceRange;
     private Boolean inStock;
+    private String searchParameter;
 }

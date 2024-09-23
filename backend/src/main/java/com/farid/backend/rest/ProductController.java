@@ -42,8 +42,6 @@ public class ProductController {
         List<ProductDTO> productDTOS = productService.getFilteredProducts(filterDTO);
         productDTOS.forEach(product -> {
             System.out.println(product.getName());
-            System.out.println(product.getDescription());
-            System.out.println(product.getCategoryDTO().getName());
         });
         return productDTOS;
     }

@@ -5,7 +5,9 @@ import { ProductService } from '../service/product.service';
 import { FormGroup,FormControl, ReactiveFormsModule } from '@angular/forms';
 import { FilterDTO } from '../model/FilterDTO';
 import { ProductDTO } from '../model/ProductDTO';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { SharedService } from '../service/shared.service';
+import { AuthService } from '../service/auth.service';
 @Component({
   selector: 'app-product-list',
   standalone: true,
@@ -103,7 +105,7 @@ import { ActivatedRoute } from '@angular/router';
                       </p>
                     </div>
                     <!-- Add to Cart Button -->
-                    <button class="btn btn-primary" style="width: 20%;"> 
+                    <button (click)="addToCart(product.id, $event)" class="btn btn-primary" style="width: 20%;"> 
                       <i class="fas fa-cart-plus"></i> Add to Cart
                     </button>
                   </div>
@@ -136,23 +138,33 @@ export class ProductListComponent {
     inStock: new FormControl(false)
   });
   
-  constructor(private productService: ProductService, private route: ActivatedRoute){
+  constructor(private productService: ProductService, private authService: AuthService, private route: ActivatedRoute, private router: Router, private sharedService: SharedService){
+    this.isLoggedIn = authService.isLoggedIn();
     this.getAllCategories().subscribe((data) => {
       this.categories = data;
-      this.parameter = this.route.snapshot.paramMap.get('parameter') || '';
-      console.log('parameter: ', this.parameter);
-      this.handleAppropriateParameterAction(this.parameter);
-    });;
+      // this.parameter = this.route.snapshot.paramMap.get('parameter') || '';
+      this.route.params.subscribe(params => {
+        const searchParam = params['parameter'];
+        console.log('parameter: ', this.parameter);
+        this.handleAppropriateParameterAction(searchParam);
+      })
+    });
   }
 
   handleAppropriateParameterAction(parameter: string){
+    let foundCategory = false;
     this.categories.forEach(categoryDTO => {
       if(categoryDTO.name.toLowerCase() === parameter.toLowerCase()){
+        foundCategory = true;
         this.categoryDTO = categoryDTO;
         this.applyFilter(categoryDTO.id);
       }
-    })
+    });
+    if(!foundCategory){
+      this.applySearchFilter(parameter);
+    }
   }
+
   
   getAllCategories(){
     return this.productService.getAllCategories();
@@ -160,18 +172,45 @@ export class ProductListComponent {
   
   applyFilter(category: string | null) {
     const filterDTO = new FilterDTO(
-      this.filters.get('category')?.value || category, 
-      this.filters.get('priceRange')?.value, 
-      this.filters.get('inStock')?.value);
+      this.filters.get('category')?.value || category,
+      this.filters.get('priceRange')?.value,
+      this.filters.get('inStock')?.value,
+      category);
             
       this.productService.getFilteredProducts(filterDTO).subscribe(data => {
         this.productsFiltered = data;
       });
   }
 
+  applySearchFilter(parameter: string | null) {
+    const filterDTO = new FilterDTO(
+      this.filters.get('category')?.value,
+      this.filters.get('priceRange')?.value,
+      this.filters.get('inStock')?.value,
+      parameter);
+      console.log("applying search filter");
+      
+      this.productService.getFilteredProducts(filterDTO).subscribe(data => {
+        this.productsFiltered = data;
+      });
+  }
+
+
   onRangeChange(event: any) {
     const priceRange = event.target.value;
     this.priceRangeText.nativeElement.textContent = `0 - ${priceRange}`;
+  }
+
+  isLoggedIn: boolean = false;
+
+  addToCart(productId: string, event: MouseEvent){
+    if(!this.isLoggedIn) this.router.navigate(['/login']);
+    else{
+        this.productService.addProductToCart(productId);
+        const button = event.target as HTMLButtonElement;
+        button.innerHTML = '<i class="fas fa-check-double"></i> Added to Cart';
+        this.sharedService.updateHeaderValue(true);
+    }
   }
 
 

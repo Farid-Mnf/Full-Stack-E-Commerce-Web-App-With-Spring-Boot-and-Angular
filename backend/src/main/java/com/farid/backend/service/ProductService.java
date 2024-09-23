@@ -38,14 +38,14 @@ public class ProductService {
 
     public ProductDTO getProductById(UUID id) {
         Product product = productRepository.findById(id).orElse(null);
-        if(product != null) return productToProductDTO(product);
+        if (product != null) return productToProductDTO(product);
         return null;
     }
 
     public ProductDTO addProduct(ProductDTO productDTO) {
         Optional<Category> categoryOptional = categoryRepository.findById(productDTO.getCategoryDTO().getId());
         Optional<User> userOptional = userRepository.findById(productDTO.getUserDTO().getId());
-        if(categoryOptional.isPresent() && userOptional.isPresent()){
+        if (categoryOptional.isPresent() && userOptional.isPresent()) {
             Product product = productRepository.save(
                     Product.builder()
                             .description(productDTO.getDescription())
@@ -58,12 +58,13 @@ public class ProductService {
                             .build()
             );
             return productToProductDTO(product);
-        }else{
+        } else {
             return null;
         }
 
     }
-    public ProductDTO productToProductDTO(Product product){
+
+    public ProductDTO productToProductDTO(Product product) {
         return ProductDTO.builder()
                 .name(product.getName())
                 .id(product.getId())
@@ -108,33 +109,58 @@ public class ProductService {
     }
 
     public List<ProductDTO> getFilteredProducts(FilterDTO filterDTO) {
-        if(filterDTO.getPriceRange().compareTo(BigDecimal.valueOf(3000)) != 0){
-            if(filterDTO.getInStock()){
-                return productRepository.findAllByCategoryIdAndPriceIsLessThanEqualAndAvailableQuantityGreaterThan(
-                        UUID.fromString(filterDTO.getCategory()),
-                        filterDTO.getPriceRange(),
-                        0,
-                        Pageable.ofSize(4)
-                ).stream().map(this::productToProductDTO).toList();
-            }
-            return productRepository.findAllByCategoryIdAndPriceIsLessThanEqual(
-                    UUID.fromString(filterDTO.getCategory()),
-                            filterDTO.getPriceRange(),
-                            Pageable.ofSize(4))
-                    .stream().map(this::productToProductDTO).toList();
+        System.out.println("search parameter: " + filterDTO.getSearchParameter());
 
-        }else{
-            if(filterDTO.getInStock()) {
-
-                return productRepository.findAllByCategoryIdAndAvailableQuantityGreaterThan(
-                                UUID.fromString(filterDTO.getCategory()),
-                                0,
-                                Pageable.ofSize(4))
-                        .stream().map(this::productToProductDTO).toList();
-            }
-             return productRepository.findAllByCategoryId(
-                            UUID.fromString(filterDTO.getCategory()), Pageable.ofSize(4))
-                    .stream().map(this::productToProductDTO).toList();
+        UUID categoryId = UUID.randomUUID();
+        if(filterDTO.getCategory() != null){
+            categoryId = UUID.fromString(filterDTO.getCategory());
         }
+        BigDecimal priceRange = filterDTO.getPriceRange();
+        boolean inStock = filterDTO.getInStock();
+        String searchParameter = filterDTO.getSearchParameter();
+        Pageable pageable = Pageable.ofSize(4);
+
+        // Determine which repository method to call based on filterDTO
+        if (inStock && priceRange.compareTo(BigDecimal.valueOf(3000)) != 0) {
+            return fetchProductsByCategoryPriceAndStock(categoryId, priceRange, searchParameter, pageable);
+
+        } else if (!inStock && priceRange.compareTo(BigDecimal.valueOf(3000)) != 0) {
+            return fetchProductsByCategoryAndPrice(categoryId, priceRange, searchParameter, pageable);
+
+        } else if (inStock) {
+            return fetchProductsByCategoryAndStock(categoryId, searchParameter, pageable);
+
+        } else {
+            return fetchProductsByCategory(categoryId, searchParameter, pageable);
+        }
+    }
+
+    private List<ProductDTO> fetchProductsByCategoryPriceAndStock(UUID categoryId, BigDecimal priceRange, String searchParameter, Pageable pageable) {
+        return productRepository.findAllByCategoryIdAndPriceIsLessThanEqualAndAvailableQuantityGreaterThanOrNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(
+                        categoryId, priceRange, 0, searchParameter, searchParameter, pageable
+                ).stream()
+                .map(this::productToProductDTO)
+                .toList();
+    }
+
+    private List<ProductDTO> fetchProductsByCategoryAndPrice(UUID categoryId, BigDecimal priceRange, String searchParameter, Pageable pageable) {
+        return productRepository.findAllByCategoryIdAndPriceIsLessThanEqualOrNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(categoryId, priceRange, searchParameter, searchParameter, pageable)
+                .stream()
+                .map(this::productToProductDTO)
+                .toList();
+    }
+
+    private List<ProductDTO> fetchProductsByCategoryAndStock(UUID categoryId, String searchParameter, Pageable pageable) {
+        return productRepository.findAllByCategoryIdAndAvailableQuantityGreaterThanOrNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(categoryId, 0, searchParameter, searchParameter, pageable)
+                .stream()
+                .map(this::productToProductDTO)
+                .toList();
+    }
+
+    private List<ProductDTO> fetchProductsByCategory(UUID categoryId, String searchParameter, Pageable pageable) {
+        return productRepository.findAllByCategoryIdOrNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(categoryId, searchParameter, searchParameter, pageable)
+                .stream()
+                .map(this::productToProductDTO)
+                .toList();
     }
 }

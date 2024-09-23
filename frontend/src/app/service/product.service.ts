@@ -11,6 +11,7 @@ import { FilterDTO } from '../model/FilterDTO';
   providedIn: 'root'
 })
 export class ProductService {
+
   categoryAPI: string = 'http://localhost:8080/category';
   productAPI: string = 'http://localhost:8080/product';
   cartAPI: string = 'http://localhost:8080/cart';
@@ -37,6 +38,8 @@ export class ProductService {
   getFilteredProducts(filterDTO: FilterDTO): Observable<ProductDTO[]> {
     return this.http.post<ProductDTO[]>(this.productAPI + '/filter', filterDTO);
   }
+
+
   
   getFeaturedProducts(): Observable<ProductDTO[]> {
     return this.http.get<ProductDTO[]>(this.productAPI + '/featured');
