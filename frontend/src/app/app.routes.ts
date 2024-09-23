@@ -5,6 +5,7 @@ import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
 import { UserComponent } from './user/user.component';
 import { ProductListComponent } from './product-list/product-list.component';
+import { CartComponent } from './cart/cart.component';
 
 
 export const routes: Routes = [
@@ -32,6 +33,11 @@ export const routes: Routes = [
         path: 'listproducts/:parameter',
         component: ProductListComponent,
         title: 'Products'
+    },
+    {
+        path: 'cart',
+        component: CartComponent,
+        title: 'Cart'
     },
     {
         path: '',

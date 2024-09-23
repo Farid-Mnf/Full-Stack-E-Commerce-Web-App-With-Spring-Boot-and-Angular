@@ -32,7 +32,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
                   }
                   @if (isLoggedIn){
                         <li class="nav-item">
-                        <a class="nav-link text-light" href="#">
+                        <a class="nav-link text-light" [routerLink]="['/cart']">
                             @if(cartAlert){
                                 <i class="fa-solid fa-cart-arrow-down" style="color: yellow;"></i>
                             }
@@ -52,6 +52,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
           </div>
       </div>
     </nav>
+    
 
   `,
     styleUrl: './header.component.css'

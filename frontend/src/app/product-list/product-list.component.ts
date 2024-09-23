@@ -2,7 +2,7 @@ import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { HeaderComponent } from "../header/header.component";
 import { CategoryDTO } from '../model/CategoryDTO';
 import { ProductService } from '../service/product.service';
-import { FormGroup,FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { FilterDTO } from '../model/FilterDTO';
 import { ProductDTO } from '../model/ProductDTO';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -14,8 +14,8 @@ import { AuthService } from '../service/auth.service';
   imports: [HeaderComponent, ReactiveFormsModule],
   template: `
   <my-header></my-header>
-
   <div style="height: 80px;"></div>
+  
 
   <div class="container mt-4">
     <div class="row">
@@ -137,8 +137,8 @@ export class ProductListComponent {
     priceRange: new FormControl(3000),
     inStock: new FormControl(false)
   });
-  
-  constructor(private productService: ProductService, private authService: AuthService, private route: ActivatedRoute, private router: Router, private sharedService: SharedService){
+
+  constructor(private productService: ProductService, private authService: AuthService, private route: ActivatedRoute, private router: Router, private sharedService: SharedService) {
     this.isLoggedIn = authService.isLoggedIn();
     this.getAllCategories().subscribe((data) => {
       this.categories = data;
@@ -151,35 +151,35 @@ export class ProductListComponent {
     });
   }
 
-  handleAppropriateParameterAction(parameter: string){
+  handleAppropriateParameterAction(parameter: string) {
     let foundCategory = false;
     this.categories.forEach(categoryDTO => {
-      if(categoryDTO.name.toLowerCase() === parameter.toLowerCase()){
+      if (categoryDTO.name.toLowerCase() === parameter.toLowerCase()) {
         foundCategory = true;
         this.categoryDTO = categoryDTO;
         this.applyFilter(categoryDTO.id);
       }
     });
-    if(!foundCategory){
+    if (!foundCategory) {
       this.applySearchFilter(parameter);
     }
   }
 
-  
-  getAllCategories(){
+
+  getAllCategories() {
     return this.productService.getAllCategories();
   }
-  
+
   applyFilter(category: string | null) {
     const filterDTO = new FilterDTO(
       this.filters.get('category')?.value || category,
       this.filters.get('priceRange')?.value,
       this.filters.get('inStock')?.value,
       category);
-            
-      this.productService.getFilteredProducts(filterDTO).subscribe(data => {
-        this.productsFiltered = data;
-      });
+
+    this.productService.getFilteredProducts(filterDTO).subscribe(data => {
+      this.productsFiltered = data;
+    });
   }
 
   applySearchFilter(parameter: string | null) {
@@ -188,11 +188,11 @@ export class ProductListComponent {
       this.filters.get('priceRange')?.value,
       this.filters.get('inStock')?.value,
       parameter);
-      console.log("applying search filter");
-      
-      this.productService.getFilteredProducts(filterDTO).subscribe(data => {
-        this.productsFiltered = data;
-      });
+    console.log("applying search filter");
+
+    this.productService.getFilteredProducts(filterDTO).subscribe(data => {
+      this.productsFiltered = data;
+    });
   }
 
 
@@ -203,13 +203,13 @@ export class ProductListComponent {
 
   isLoggedIn: boolean = false;
 
-  addToCart(productId: string, event: MouseEvent){
-    if(!this.isLoggedIn) this.router.navigate(['/login']);
-    else{
-        this.productService.addProductToCart(productId);
-        const button = event.target as HTMLButtonElement;
-        button.innerHTML = '<i class="fas fa-check-double"></i> Added to Cart';
-        this.sharedService.updateHeaderValue(true);
+  addToCart(productId: string, event: MouseEvent) {
+    if (!this.isLoggedIn) this.router.navigate(['/login']);
+    else {
+      this.productService.addProductToCart(productId);
+      const button = event.target as HTMLButtonElement;
+      button.innerHTML = '<i class="fas fa-check-double"></i> Added to Cart';
+      this.sharedService.updateHeaderValue(true);
     }
   }
 
