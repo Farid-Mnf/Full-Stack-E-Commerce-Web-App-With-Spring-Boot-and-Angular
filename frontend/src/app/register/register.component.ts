@@ -75,7 +75,8 @@ export class RegisterComponent {
       this.register.value.phone ?? '', 
       this.register.value.password ?? '', 
       '',
-      addressDTO
+      addressDTO,
+      null
     );
 
     this.http.post<UserDTO>(this.apiURL, userDTO, { observe: 'response'}).subscribe((response: HttpResponse<any>) => {

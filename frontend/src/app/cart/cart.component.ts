@@ -1,6 +1,8 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HeaderComponent } from "../header/header.component";
+import { CartService } from '../service/cart.service';
+import { PurchaseService } from '../service/purchase.service';
 
 @Component({
   selector: 'app-cart',
@@ -69,67 +71,118 @@ import { HeaderComponent } from "../header/header.component";
   `,
   styleUrl: './cart.component.css'
 })
-export class CartComponent {
-viewOrderDetails(arg0: string) {
-throw new Error('Method not implemented.');
-}
-  cartTotal: number = 332.94;
+export class CartComponent implements OnInit {
+
+  cartItems: any[] = [];
+  cartTotal: number = 0;
+  purchaseHistory: any[] = [];
+  selectedOrder: any;
+
+  constructor(private cartService: CartService, private purchaseService: PurchaseService) { }
+
+  ngOnInit(): void {
+    this.loadCartItems();
+    // this.loadPurchaseHistory();
+  }
+
+  loadCartItems(): void {
+    this.cartService.getCartItems().subscribe((items) => {
+      this.cartItems = items;
+      console.log(items);
+      
+      this.calculateCartTotal();
+    });
+  }
+
+  loadPurchaseHistory(): void {
+    this.purchaseService.getPurchaseHistory().subscribe((history) => {
+      this.purchaseHistory = history;
+    });
+  }
+
+  calculateCartTotal(): void {
+    this.cartTotal = this.cartItems.reduce((acc, item) => acc + (item.product.price * item.quantity), 0);
+  }
+
+  removeFromCart(cartItem: any): void {
+    this.cartService.removeCartItem(cartItem.product.id).subscribe(() => {
+      this.loadCartItems();
+    });
+  }
+
+  checkout(): void {
+    // Handle checkout logic
+  }
+
+  viewOrderDetails(orderId: string): void {
+    // Load the details of the selected order
+    this.selectedOrder = this.purchaseHistory.find(order => order.orderId === orderId);
+  }
+
+
+
+
+
+// viewOrderDetails(arg0: string) {
+// throw new Error('Method not implemented.');
+// }
+//   cartTotal: number = 332.94;
   
-  checkout() {
+//   checkout() {
 
-  }
-  removeFromCart(_t7: any) {
-  }
+//   }
+//   removeFromCart(_t7: any) {
+//   }
 
-  cartItems = [
-    {
-      quantity: 7,
-      product: {
-        imageUrl: '/assets/product.jpg',
-        name: 'Headset',
-        price: 322.88
-      }
-    },
-    {
-      quantity: 1,
-      product: {
-        imageUrl: '/assets/product.jpg',
-        name: 'Headset',
-        price: 32.88
-      }
-    },
-    {
-      quantity: 5,
-      product: {
-        imageUrl: '/assets/product.jpg',
-        name: 'Headset',
-        price: 90
-      }
-    }
-  ]
+  // cartItems = [
+  //   {
+  //     quantity: 7,
+  //     product: {
+  //       imageUrl: '/assets/product.jpg',
+  //       name: 'Headset',
+  //       price: 322.88
+  //     }
+  //   },
+  //   {
+  //     quantity: 1,
+  //     product: {
+  //       imageUrl: '/assets/product.jpg',
+  //       name: 'Headset',
+  //       price: 32.88
+  //     }
+  //   },
+  //   {
+  //     quantity: 5,
+  //     product: {
+  //       imageUrl: '/assets/product.jpg',
+  //       name: 'Headset',
+  //       price: 90
+  //     }
+  //   }
+  // ]
 
 
-  purchaseHistory = [
-    {
-      orderId: "8239.23823.8dfkljsdrsdkdsddfjsdkljfsdlkf",
-      date: Date.now(),
-      quantity: 3,
-      totalPrice: 2030.94,
-      totalItems: 5,
-      product: {
-        name: 'Smart TV'
-      }
-    },
-    {
-      orderId: "83293829384kldjfd823sdklfjdklaDSKFLJ",
-      date: Date.now(),
-      quantity: 6,
-      totalPrice: 1730.54,
-      totalItems: 8,
-      product: {
-        name: 'Iphone'
-      }
-    }
-  ]
+  // purchaseHistory = [
+  //   {
+  //     orderId: "8239.23823.8dfkljsdrsdkdsddfjsdkljfsdlkf",
+  //     date: Date.now(),
+  //     quantity: 3,
+  //     totalPrice: 2030.94,
+  //     totalItems: 5,
+  //     product: {
+  //       name: 'Smart TV'
+  //     }
+  //   },
+  //   {
+  //     orderId: "83293829384kldjfd823sdklfjdklaDSKFLJ",
+  //     date: Date.now(),
+  //     quantity: 6,
+  //     totalPrice: 1730.54,
+  //     totalItems: 8,
+  //     product: {
+  //       name: 'Iphone'
+  //     }
+  //   }
+  // ]
 
 }
