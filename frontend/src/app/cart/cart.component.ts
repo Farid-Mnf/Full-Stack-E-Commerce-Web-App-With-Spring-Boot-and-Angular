@@ -17,8 +17,16 @@ import { PurchaseService } from '../service/purchase.service';
     
     <!-- Current Cart Section -->
     <div class="col-md-8">
-      <h2><i class="fas fa-shopping-cart"></i> Shopping Cart</h2>
+      <h2 class="mb-4"><i class="fas fa-shopping-cart"></i> Shopping Cart</h2>
       <ul class="list-group shadow">
+
+      @if(!cartItems){
+        <div class="text-center my-5">
+          <i class="fas fa-box-open fa-10x text-muted mb-3"></i>
+          <p class="lead text-muted">Your cart is currently empty.</p>
+        </div>
+      }
+
         @for (cartItem of cartItems; track $index) {
           <li class="list-group-item d-flex justify-content-between align-items-center">
             <div class="d-flex">
@@ -51,6 +59,7 @@ import { PurchaseService } from '../service/purchase.service';
     <div class="col-md-4">
       <h2><i class="fas fa-history"></i> Purchase History</h2>
       <ul class="list-group shadow">
+        <li>list of previous orders checked</li> 
         @for (purchase of purchaseHistory; track $index) {
           <li class="list-group-item">
             <h6 class="text-break">Order ID: <span class="text-muted">{{ purchase.orderId }}</span></h6>
@@ -79,27 +88,18 @@ export class CartComponent {
   selectedOrder: any;
 
   constructor(private cartService: CartService, private purchaseService: PurchaseService) { 
-    // this.loadCartItems();
-
   }
 
-  ngOnInit(): void {
-    console.log('===== on init called');
-    
-    this.cartService.getCartItems().subscribe((items) => {
-      this.cartItems = items;
-      console.log(items);
-      
-      // this.calculateCartTotal();
-    });
+  ngOnInit(): void {    
+    this.loadCartItems();
   }
 
   loadCartItems(): void {
     this.cartService.getCartItems().subscribe((items) => {
-      this.cartItems = items;
-      console.log(items);
-      
-      // this.calculateCartTotal();
+      this.cartItems = items;  
+      console.log(this.cartItems);
+        
+      this.calculateCartTotal();
     });
   }
 
@@ -110,11 +110,16 @@ export class CartComponent {
   }
 
   calculateCartTotal(): void {
-    this.cartTotal = this.cartItems.reduce((acc, item) => acc + (item.product.price * item.quantity), 0);
+    if(this.cartItems)
+      this.cartTotal = this.cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+    else
+      this.cartTotal = 0;
   }
 
   removeFromCart(cartItem: any): void {
-    this.cartService.removeCartItem(cartItem.product.id).subscribe(() => {
+    console.log(cartItem.id);
+    
+    this.cartService.removeCartItem(cartItem.id).subscribe(() => {
       this.loadCartItems();
     });
   }
@@ -127,71 +132,5 @@ export class CartComponent {
     // Load the details of the selected order
     this.selectedOrder = this.purchaseHistory.find(order => order.orderId === orderId);
   }
-
-
-
-
-
-// viewOrderDetails(arg0: string) {
-// throw new Error('Method not implemented.');
-// }
-//   cartTotal: number = 332.94;
-  
-//   checkout() {
-
-//   }
-//   removeFromCart(_t7: any) {
-//   }
-
-  // cartItems = [
-  //   {
-  //     quantity: 7,
-  //     product: {
-  //       imageUrl: '/assets/product.jpg',
-  //       name: 'Headset',
-  //       price: 322.88
-  //     }
-  //   },
-  //   {
-  //     quantity: 1,
-  //     product: {
-  //       imageUrl: '/assets/product.jpg',
-  //       name: 'Headset',
-  //       price: 32.88
-  //     }
-  //   },
-  //   {
-  //     quantity: 5,
-  //     product: {
-  //       imageUrl: '/assets/product.jpg',
-  //       name: 'Headset',
-  //       price: 90
-  //     }
-  //   }
-  // ]
-
-
-  // purchaseHistory = [
-  //   {
-  //     orderId: "8239.23823.8dfkljsdrsdkdsddfjsdkljfsdlkf",
-  //     date: Date.now(),
-  //     quantity: 3,
-  //     totalPrice: 2030.94,
-  //     totalItems: 5,
-  //     product: {
-  //       name: 'Smart TV'
-  //     }
-  //   },
-  //   {
-  //     orderId: "83293829384kldjfd823sdklfjdklaDSKFLJ",
-  //     date: Date.now(),
-  //     quantity: 6,
-  //     totalPrice: 1730.54,
-  //     totalItems: 8,
-  //     product: {
-  //       name: 'Iphone'
-  //     }
-  //   }
-  // ]
 
 }

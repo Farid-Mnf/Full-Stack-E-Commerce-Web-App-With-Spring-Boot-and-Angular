@@ -12,22 +12,14 @@ export class CartService {
   cartId: string | null = null;
 
 
-
-  constructor(private http: HttpClient, private userService: UserService) {
-    console.log('constructor');
-    
+  constructor(private http: HttpClient, private userService: UserService) {    
     userService.getUser()?.subscribe(user => {
       this.cartId = user.cartDTO.id;
       this.cartIdSubject.next(this.cartId); // Emit the cartId
-
-      console.log('cart id: ', this.cartId);
     })
   }
 
-  getCartItems(): Observable<any[]> {
-    console.log('api: ', this.cartAPI);
-    console.log('cart id: ', this.cartId);
-    
+  getCartItems(): Observable<any[]> {    
     
     return this.cartIdSubject.pipe(
       switchMap(cartId => {
@@ -40,12 +32,10 @@ export class CartService {
         }
       })
     );
-
   }
 
-  removeCartItem(productId: string): Observable<void> {
-    return this.http.delete<void>(`/api/cart/${productId}`);
+  removeCartItem(cartItemId: string): Observable<void> {
+    return this.http.delete<void>(this.cartAPI + '/' + cartItemId);
   }
   
-
 }

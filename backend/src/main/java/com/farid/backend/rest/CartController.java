@@ -6,6 +6,7 @@ import com.farid.backend.dto.UserDTO;
 import com.farid.backend.service.CartService;
 import com.farid.backend.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,7 +36,12 @@ public class CartController {
     }
     @GetMapping("/{id}")
     public List<CartItemDTO> getCartItems(@PathVariable UUID id){
-        System.out.println("GEt method ");
         return cartService.getCartItemsDTOS(id);
+    }
+    @DeleteMapping("/{id}")
+    public void deleteCartItem(@PathVariable UUID id){
+        System.out.println("---------------deleting");
+        cartService.deleteCartItem(id);
+        System.out.println("---------------deleting");
     }
 }

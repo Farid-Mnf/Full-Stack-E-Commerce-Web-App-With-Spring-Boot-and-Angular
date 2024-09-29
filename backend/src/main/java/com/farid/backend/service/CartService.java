@@ -9,6 +9,7 @@ import com.farid.backend.repository.CartItemRepository;
 import com.farid.backend.repository.CartRepository;
 import com.farid.backend.repository.ProductRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -71,5 +72,9 @@ public class CartService {
         return CartDTO.builder()
                 .id(cart.getId())
                 .build();
+    }
+
+    public void deleteCartItem(UUID id) {
+        cartItemRepository.deleteById(id);
     }
 }
