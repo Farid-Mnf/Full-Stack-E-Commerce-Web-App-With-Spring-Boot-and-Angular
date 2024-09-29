@@ -13,8 +13,8 @@ import java.util.UUID;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, UUID> {
     List<Product> getProductsBySellerId(UUID id);
-    List<Product> findProductByDescriptionContains(String value, Pageable pageable);
-    Page<Product> findAllByOrderByAvailableQuantityDesc(Pageable pageable);
+    List<Product> findProductByDescriptionContainsAndAvailableQuantityGreaterThan(String value, Pageable pageable, int availableQuantity);
+    Page<Product> findAllByAvailableQuantityGreaterThanOrderByAvailableQuantityDesc(Pageable pageable, int availableQuantity);
     Page<Product> findAllByCategoryIdOrNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(
             UUID categoryId, String name, String description, Pageable pageable);
     Page<Product> findAllByCategoryIdAndPriceIsLessThanEqualOrNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(

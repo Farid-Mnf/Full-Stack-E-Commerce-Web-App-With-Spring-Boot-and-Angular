@@ -99,12 +99,12 @@ public class ProductService {
     }
 
     public List<ProductDTO> getFeaturedProducts() {
-        return productRepository.findAllByOrderByAvailableQuantityDesc(Pageable.ofSize(4))
+        return productRepository.findAllByAvailableQuantityGreaterThanOrderByAvailableQuantityDesc(Pageable.ofSize(4), 0)
                 .stream().map(this::productToProductDTO).collect(Collectors.toList());
     }
 
     public List<ProductDTO> getTrendingProducts() {
-        return productRepository.findProductByDescriptionContains("Trending", Pageable.ofSize(4))
+        return productRepository.findProductByDescriptionContainsAndAvailableQuantityGreaterThan("Trending", Pageable.ofSize(4), 0)
                 .stream().map(this::productToProductDTO).collect(Collectors.toList());
     }
 

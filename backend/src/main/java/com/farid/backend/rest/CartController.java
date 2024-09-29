@@ -40,8 +40,6 @@ public class CartController {
     }
     @DeleteMapping("/{id}")
     public void deleteCartItem(@PathVariable UUID id){
-        System.out.println("---------------deleting");
         cartService.deleteCartItem(id);
-        System.out.println("---------------deleting");
     }
 }
