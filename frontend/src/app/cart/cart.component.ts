@@ -22,10 +22,10 @@ import { PurchaseService } from '../service/purchase.service';
         @for (cartItem of cartItems; track $index) {
           <li class="list-group-item d-flex justify-content-between align-items-center">
             <div class="d-flex">
-              <img [src]="cartItem.product.imageUrl" class="img-thumbnail me-3" alt="{{ cartItem.product.name }}" style="width: 100px; height: 100px;">
+              <img [src]="'http://localhost:8080/images/' + cartItem.imageUrl" class="img-thumbnail me-3" alt="{{ cartItem.productName }}" style="width: 100px; height: 100px;">
               <div>
-                <h5>{{ cartItem.product.name }}</h5>
-                <p>Price: <strong>{{ cartItem.product.price | currency }}</strong></p>
+                <h5>{{ cartItem.productName }}</h5>
+                <p>Price: <strong>{{ cartItem.price | currency }}</strong></p>
                 <p>Quantity: {{ cartItem.quantity }}</p>
                 <button (click)="removeFromCart(cartItem)" class="btn btn-danger btn-sm">
                   <i class="fas fa-trash-alt"></i> Remove
@@ -33,7 +33,7 @@ import { PurchaseService } from '../service/purchase.service';
               </div>
             </div>
             <span class="badge bg-primary rounded-pill">
-              {{ (cartItem.product.price * cartItem.quantity) | currency}}
+              {{ (cartItem.price * cartItem.quantity) | currency}}
             </span>
           </li>
         }
@@ -41,7 +41,7 @@ import { PurchaseService } from '../service/purchase.service';
       
       <div class="text-end mt-3">
         <h4 class="text-muted">Total: <strong>{{ cartTotal | currency }}</strong></h4>
-        <button class="btn btn-success" (click)="checkout()">
+        <button class="btn btn-success mb-4" (click)="checkout()">
           <i class="fas fa-credit-card"></i> Checkout
         </button>
       </div>
@@ -71,18 +71,27 @@ import { PurchaseService } from '../service/purchase.service';
   `,
   styleUrl: './cart.component.css'
 })
-export class CartComponent implements OnInit {
+export class CartComponent {
 
   cartItems: any[] = [];
   cartTotal: number = 0;
   purchaseHistory: any[] = [];
   selectedOrder: any;
 
-  constructor(private cartService: CartService, private purchaseService: PurchaseService) { }
+  constructor(private cartService: CartService, private purchaseService: PurchaseService) { 
+    // this.loadCartItems();
+
+  }
 
   ngOnInit(): void {
-    this.loadCartItems();
-    // this.loadPurchaseHistory();
+    console.log('===== on init called');
+    
+    this.cartService.getCartItems().subscribe((items) => {
+      this.cartItems = items;
+      console.log(items);
+      
+      // this.calculateCartTotal();
+    });
   }
 
   loadCartItems(): void {
@@ -90,7 +99,7 @@ export class CartComponent implements OnInit {
       this.cartItems = items;
       console.log(items);
       
-      this.calculateCartTotal();
+      // this.calculateCartTotal();
     });
   }
 

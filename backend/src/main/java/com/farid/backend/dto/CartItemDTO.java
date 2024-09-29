@@ -1,8 +1,5 @@
 package com.farid.backend.dto;
 
-import com.farid.backend.entity.Cart;
-import com.farid.backend.entity.Product;
-import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 
@@ -14,7 +11,8 @@ import java.util.UUID;
 public class CartItemDTO {
     private UUID id;
     private UUID cartId;
-    private UUID productId;
+    private String imageUrl;
     private int quantity;
+    private String productName;
     private BigDecimal price;
 }

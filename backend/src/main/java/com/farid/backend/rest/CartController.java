@@ -8,6 +8,7 @@ import com.farid.backend.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -33,7 +34,8 @@ public class CartController {
         );
     }
     @GetMapping("/{id}")
-    public Set<CartItemDTO> getCartItems(@PathVariable UUID id){
-        return cartService.getCart(id).getCartItemDTOS();
+    public List<CartItemDTO> getCartItems(@PathVariable UUID id){
+        System.out.println("GEt method ");
+        return cartService.getCartItemsDTOS(id);
     }
 }

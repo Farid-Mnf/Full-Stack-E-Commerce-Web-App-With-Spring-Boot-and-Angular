@@ -8,11 +8,12 @@ import com.farid.backend.entity.Product;
 import com.farid.backend.repository.CartItemRepository;
 import com.farid.backend.repository.CartRepository;
 import com.farid.backend.repository.ProductRepository;
-import com.farid.backend.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -22,12 +23,26 @@ public class CartService {
     private ProductRepository productRepository;
     private CartItemRepository cartItemRepository;
 
-    public CartDTO getCart(UUID id){
+    public List<CartItemDTO> getCartItemsDTOS(UUID id){
+        System.out.println("getCartItemsDTOS");
         Optional<Cart> optionalCart = cartRepository.findById(id);
         if(optionalCart.isPresent()){
-            return cartToCartDTO(optionalCart.get());
+            List<CartItem> cartItems = optionalCart.get().getCartItems();
+            System.out.println("cart items size: " + cartItems.size());
+            if(!cartItems.isEmpty())
+                return cartItems.stream().map(this::cartItemToCartItemDTO).toList();
         }
         return null;
+    }
+    public CartItemDTO cartItemToCartItemDTO(CartItem cartItem){
+        return CartItemDTO.builder()
+                .price(cartItem.getPrice())
+                .quantity(cartItem.getQuantity())
+                .cartId(cartItem.getCart().getId())
+                .id(cartItem.getId())
+                .imageUrl(cartItem.getProduct().getImageUrl())
+                .productName(cartItem.getProduct().getName())
+                .build();
     }
     public CartItemDTO addProductToCart(UUID productId, UUID cartId, int quantity){
         Cart cart = cartRepository.findById(cartId).get();
@@ -46,7 +61,6 @@ public class CartService {
         );
 
         return CartItemDTO.builder()
-                .productId(cartItem.getProduct().getId())
                 .cartId(cartItem.getCart().getId())
                 .quantity(cartItem.getQuantity())
                 .id(cartItem.getId())

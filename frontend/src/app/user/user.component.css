@@ -47,3 +47,12 @@
     max-height: 230px;
     object-fit: contain;
   }
+  .position-relative{
+    height: 400px;
+    position: relative !important;
+  }
+  .position-down{
+    position: absolute !important;
+    bottom: 0px;
+    width: 90%;
+  }

@@ -18,7 +18,7 @@ import { SharedService } from '../service/shared.service';
         <div class="row">
         @for (product of featuredProducts; track product.id) {
             <div class="col-md-3">
-                <div class="card shade">
+                <div class="card shade p-2">
                     <img [src]="'http://localhost:8080/images/' + product.imageUrl" class="card-img-top product-img" [alt]="product.name">
                     <div class="card-body">
                         <h5 class="card-title">{{ product.name }}</h5>

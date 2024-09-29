@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, switchMap } from 'rxjs';
 import { UserService } from './user.service';
 
 @Injectable({
@@ -8,16 +8,39 @@ import { UserService } from './user.service';
 })
 export class CartService {
   cartAPI: string = 'http://localhost:8080/cart';
-  cartId: string = '';
+  private cartIdSubject: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
+  cartId: string | null = null;
+
+
 
   constructor(private http: HttpClient, private userService: UserService) {
+    console.log('constructor');
+    
     userService.getUser()?.subscribe(user => {
       this.cartId = user.cartDTO.id;
+      this.cartIdSubject.next(this.cartId); // Emit the cartId
+
+      console.log('cart id: ', this.cartId);
     })
   }
 
   getCartItems(): Observable<any[]> {
-    return this.http.get<any[]>(this.cartAPI + "/" + this.cartId);
+    console.log('api: ', this.cartAPI);
+    console.log('cart id: ', this.cartId);
+    
+    
+    return this.cartIdSubject.pipe(
+      switchMap(cartId => {
+        if (cartId) {
+          console.log('Fetching cart items for cartId:', cartId);
+          return this.http.get<any[]>(this.cartAPI + "/" + cartId);
+        } else {
+          console.error('Cart ID is not available');
+          return [];
+        }
+      })
+    );
+
   }
 
   removeCartItem(productId: string): Observable<void> {

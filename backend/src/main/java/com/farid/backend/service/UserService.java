@@ -97,7 +97,8 @@ public class UserService {
                 .cartId(cartItem.getCart().getId())
                 .price(cartItem.getPrice())
                 .quantity(cartItem.getQuantity())
-                .productId(cartItem.getProduct().getId())
+                .productName(cartItem.getProduct().getName())
+                .imageUrl(cartItem.getProduct().getImageUrl())
                 .id(cartItem.getId())
                 .build();
     }
