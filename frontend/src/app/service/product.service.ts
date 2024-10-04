@@ -52,9 +52,8 @@ export class ProductService {
     return this.http.get<ProductDTO[]>(this.productAPI + '/trending');
   }
 
-  addProductToCart(productId: string) {
+  addProductToCart(productId: string, quantity: Number) {
     const userId: string = this.authService.getUserId();
-    const quantity = 1;
 
     this.http.post(this.cartAPI, {userId, productId, quantity}, { responseType: 'text'}).subscribe(
       (response) => {

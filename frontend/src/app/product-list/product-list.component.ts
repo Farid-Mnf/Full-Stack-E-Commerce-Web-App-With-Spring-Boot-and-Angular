@@ -128,7 +128,8 @@ export class ProductListComponent {
   categories: CategoryDTO[] = [];
   productsFiltered: ProductDTO[] = [];
   @ViewChild('priceRangeText') priceRangeText!: ElementRef;
-
+  
+  isLoggedIn: boolean = false;
   parameter: string = '';
   categoryDTO: CategoryDTO | null = null;
 
@@ -201,12 +202,11 @@ export class ProductListComponent {
     this.priceRangeText.nativeElement.textContent = `0 - ${priceRange}`;
   }
 
-  isLoggedIn: boolean = false;
 
   addToCart(productId: string, event: MouseEvent) {
     if (!this.isLoggedIn) this.router.navigate(['/login']);
     else {
-      this.productService.addProductToCart(productId);
+      this.productService.addProductToCart(productId, 1);
       const button = event.target as HTMLButtonElement;
       button.innerHTML = '<i class="fas fa-check-double"></i> Added to Cart';
       this.sharedService.updateHeaderValue(true);

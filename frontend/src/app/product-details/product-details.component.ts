@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ProductService } from '../service/product.service';
 import { ProductDTO } from '../model/ProductDTO';
 import { HeaderComponent } from "../header/header.component";
 import { CurrencyPipe } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { AuthService } from '../service/auth.service';
+import { SharedService } from '../service/shared.service';
 
 @Component({
   selector: 'app-product-details',
@@ -17,7 +19,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
     @if (product) {
       <div class="container my-5">
         <div class="row">
-          <!-- Product Image - 40% width -->
+          <!-- Image -->
           <div class="col-md-4 d-flex justify-content-center">
             <img 
             [src]="'http://localhost:8080/images/' + product.imageUrl" 
@@ -36,24 +38,27 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
             <!-- Price -->
              @if(product.availableQuantity > 0){
-               <h3 class="text-success mb-4">
-                 <i class="fas fa-dollar-sign"></i> {{ product.price | currency }}
-               </h3>
+              <p class="card-text text-muted mb-3 fs-4 ">
+                <i class="fas fa-tag"></i> <span class="text-success"> {{ product.price | currency}}</span>
+              </p>
+
              }
              @if(product.availableQuantity === 0){
-              <h3 class="text-danger mb-4">
-                 <i class="fas fa-dollar-sign"></i> {{ product.price | currency }}
-               </h3>
+              <p class="card-text text-muted mb-3 fs-4">
+                <i class="fas fa-tag"></i> <span class="text-danger"> {{ product.price | currency}}</span>
+              </p>
              }
 
             <!-- Seller Name with Link -->
-            <p>
-              <i class="fas fa-user"></i> Sold by: 
-              <a [routerLink]="['/seller', product.userDTO.id]" class="text-primary">{{ product.userDTO.name }}</a>
+            <p class="mb-3">
+              Sold by:
+              <a href="/seller-profile/seller-id" class="text-decoration-none">
+                <i class="fas fa-user"></i> {{ product.userDTO.name }}
+              </a>
             </p>
 
             <!-- Available Quantity Dropdown -->
-            <div class="mb-4" style="width: 20%;">
+            <div class="mb-3" style="width: 20%;">
               <label for="quantity" class="form-label">
                 <i class="fas fa-boxes"></i> Quantity:
               </label>
@@ -65,24 +70,24 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
             </div>
 
             @if (product.availableQuantity === 0) {
-              <p class="card-text text-muted mb-1">
+              <p class="card-text text-muted mb-3">
                 <i class="fas fa-box-open"></i> <span style="color: red;"> Out of Stock</span>
               </p>
             }
             @if(product.availableQuantity > 0){
-              <p class="card-text text-muted mb-1">
+              <p class="card-text text-muted mb-3">
                 <i class="fas fa-box-open"></i> <span style="color: green;"> In Stock</span>
               </p>
             }
 
             <!-- Add to Cart Button -->
              @if (product.availableQuantity > 0) {
-               <button (click)="addToCart()" class="btn btn-primary btn-lg">
+               <button (click)="addToCart(product.id, $event)" class="btn btn-primary btn-lg">
                  <i class="fas fa-cart-plus"></i> Add to Cart
                </button>
              }
              @if(product.availableQuantity === 0){
-              <button (click)="addToCart()" class="btn btn-primary btn-lg" disabled>  
+              <button class="btn btn-primary btn-lg" disabled>  
                  <i class="fas fa-cart-plus"></i> Add to Cart
                </button>
              }
@@ -96,18 +101,13 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 export class ProductDetailsComponent implements OnInit {
 
   isDisabled: boolean = false;
+  isLoggedIn: boolean = false;
+  
   product!: ProductDTO;
   selectedQuantity: FormControl =  new FormControl(1);
   availQuantities: Number[] = [];
 
-  constructor(private productService: ProductService, private route: ActivatedRoute){}
-
-  addToCart(): void {
-    if(this.product.availableQuantity > 0){
-      console.log(this.selectedQuantity.value);
-    }
-    
-  }
+  constructor(private authService: AuthService, private productService: ProductService, private route: ActivatedRoute, private router: Router, private sharedService: SharedService){}
 
   ngOnInit(): void {
     const productId = this.route.snapshot.paramMap.get('id');    
@@ -119,6 +119,17 @@ export class ProductDetailsComponent implements OnInit {
           this.isDisabled = true;
         }
       });
+    }
+    this.isLoggedIn = this.authService.isLoggedIn();
+  }
+
+  addToCart(productId: string, event: MouseEvent) {
+    if (!this.isLoggedIn) this.router.navigate(['/login']);
+    else {
+      this.productService.addProductToCart(productId, this.selectedQuantity.value);
+      const button = event.target as HTMLButtonElement;
+      button.innerHTML = '<i class="fas fa-check-double"></i> Added to Cart';
+      this.sharedService.updateHeaderValue(true);
     }
   }
 

@@ -54,7 +54,7 @@ export class ProductRecommendationsComponent {
     addToCart(productId: string, event: MouseEvent){
         if(!this.isLoggedIn) this.router.navigate(['/login']);
         else{
-            this.productService.addProductToCart(productId);
+            this.productService.addProductToCart(productId, 1);
             const button = event.target as HTMLButtonElement;
             button.innerHTML = '<i class="fas fa-check-double"></i> Added to Cart';
             this.sharedService.updateHeaderValue(true);
