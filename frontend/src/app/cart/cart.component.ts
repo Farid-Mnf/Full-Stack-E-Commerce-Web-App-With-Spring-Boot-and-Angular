@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { HeaderComponent } from "../header/header.component";
 import { CartService } from '../service/cart.service';
 import { PurchaseService } from '../service/purchase.service';
+import { SharedService } from '../service/shared.service';
 
 @Component({
   selector: 'app-cart',
@@ -87,7 +88,7 @@ export class CartComponent {
   purchaseHistory: any[] = [];
   selectedOrder: any;
 
-  constructor(private cartService: CartService, private purchaseService: PurchaseService) { 
+  constructor(private cartService: CartService, private purchaseService: PurchaseService, private sharedService: SharedService) { 
   }
 
   ngOnInit(): void {    
@@ -96,10 +97,11 @@ export class CartComponent {
 
   loadCartItems(): void {
     this.cartService.getCartItems().subscribe((items) => {
-      this.cartItems = items;  
-      console.log(this.cartItems);
-        
+      this.cartItems = items;          
       this.calculateCartTotal();
+      if(!this.cartItems){
+        this.sharedService.updateHeaderValue(false);
+      }
     });
   }
 
@@ -116,12 +118,11 @@ export class CartComponent {
       this.cartTotal = 0;
   }
 
-  removeFromCart(cartItem: any): void {
-    console.log(cartItem.id);
-    
+  removeFromCart(cartItem: any): void {    
     this.cartService.removeCartItem(cartItem.id).subscribe(() => {
-      this.loadCartItems();
+      this.loadCartItems();  
     });
+    
   }
 
   checkout(): void {
