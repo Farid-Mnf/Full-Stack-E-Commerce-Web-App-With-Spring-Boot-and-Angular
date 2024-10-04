@@ -105,9 +105,17 @@ import { AuthService } from '../service/auth.service';
                       </p>
                     </div>
                     <!-- Add to Cart Button -->
-                    <button (click)="addToCart(product.id, $event)" class="btn btn-primary" style="width: 20%;"> 
-                      <i class="fas fa-cart-plus"></i> Add to Cart
-                    </button>
+
+                    @if(product.availableQuantity === 0){
+                      <button (click)="addToCart(product.id, $event)" class="btn btn-primary" style="width: 20%;" disabled>
+                        <i class="fas fa-cart-plus"></i> Add to Cart
+                      </button>
+                    }
+                    @if(product.availableQuantity > 0){
+                      <button (click)="addToCart(product.id, $event)" class="btn btn-primary" style="width: 20%;"> 
+                        <i class="fas fa-cart-plus"></i> Add to Cart
+                      </button>
+                    }
                   </div>
                 </div>
               </div>
@@ -143,7 +151,6 @@ export class ProductListComponent {
     this.isLoggedIn = authService.isLoggedIn();
     this.getAllCategories().subscribe((data) => {
       this.categories = data;
-      // this.parameter = this.route.snapshot.paramMap.get('parameter') || '';
       this.route.params.subscribe(params => {
         const searchParam = params['parameter'];
         console.log('parameter: ', this.parameter);
