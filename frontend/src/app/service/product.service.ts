@@ -11,15 +11,18 @@ import { FilterDTO } from '../model/FilterDTO';
   providedIn: 'root'
 })
 export class ProductService {
-
+  
   categoryAPI: string = 'http://localhost:8080/category';
   productAPI: string = 'http://localhost:8080/product';
   cartAPI: string = 'http://localhost:8080/cart';
-
-
+  
+  
   constructor(private http: HttpClient, private useService: UserService, private authService: AuthService) {
   }
   
+  getProduct(id: string): Observable<ProductDTO> {
+    return this.http.get<ProductDTO>(this.productAPI + '/' + id);
+  }
   addProduct(formData: FormData): Observable<string> {
     return this.http.post(this.productAPI, formData, { responseType: 'text' });
   }

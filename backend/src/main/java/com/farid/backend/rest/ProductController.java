@@ -39,11 +39,7 @@ public class ProductController {
 
     @PostMapping("/filter")
     public List<ProductDTO> getFilteredProducts(@RequestBody FilterDTO filterDTO){
-        List<ProductDTO> productDTOS = productService.getFilteredProducts(filterDTO);
-        productDTOS.forEach(product -> {
-            System.out.println(product.getName());
-        });
-        return productDTOS;
+        return productService.getFilteredProducts(filterDTO);
     }
     @GetMapping("/user/{id}")
     public List<ProductDTO> getAllUserProducts(@PathVariable("id") UUID userId){

@@ -5,13 +5,13 @@ import { ProductService } from '../service/product.service';
 import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { FilterDTO } from '../model/FilterDTO';
 import { ProductDTO } from '../model/ProductDTO';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { SharedService } from '../service/shared.service';
 import { AuthService } from '../service/auth.service';
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  imports: [HeaderComponent, ReactiveFormsModule],
+  imports: [HeaderComponent, ReactiveFormsModule, RouterLink],
   template: `
   <my-header></my-header>
   <div style="height: 80px;"></div>
@@ -80,8 +80,8 @@ import { AuthService } from '../service/auth.service';
                   <div class="card-body d-flex justify-content-between align-items-center">
                     <!-- Product Name, Price, and Seller Profile -->
                     <div style="width: 75%;">
-                      <h5 class="card-title">{{ product.name }}</h5>
-                      <h5 class="card-title">{{ product.description }}</h5>
+                      <h5 class="card-title clickable" [routerLink]="['/product', product.id]">{{ product.name }}</h5>
+                      <h5 class="card-title clickable" [routerLink]="['/product', product.id]">{{ product.description }}</h5>
                       <p class="card-text text-muted mb-1 fs-4">
                         <i class="fas fa-tag"></i> $<span>{{ product.price }}</span>
                       </p>

@@ -1,0 +1,10 @@
+.product-image {
+    transform: scale(1.1); /* Increase the scale for zoom effect */
+    transition: transform 0.3s ease; /* Smooth transition for any hover or focus effects */
+  }
+  
+  .product-image:hover {
+    transform: scale(1.5); /* Slight zoom on hover for a nice effect */
+    translate: 20px 100px;
+  }
+  
