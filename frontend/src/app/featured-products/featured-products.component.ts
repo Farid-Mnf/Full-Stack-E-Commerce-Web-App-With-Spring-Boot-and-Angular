@@ -21,7 +21,7 @@ import { SharedService } from '../service/shared.service';
                 <div class="card shade p-2">
                     <img [src]="'http://localhost:8080/images/' + product.imageUrl" class="card-img-top product-img" [alt]="product.name">
                     <div class="card-body">
-                        <h5 class="card-title">{{ product.name }}</h5>
+                        <h5 class="card-title clickable" [routerLink]="['/product', product.id]">{{ product.name }}</h5>
                         <p class="card-text">$<span class="fs-4">{{product.price}}</span></p>
                         <button class="btn btn-primary" (click)="addToCart(product.id, $event)">
                             <i class="fa-solid fa-plus"></i> Add to Cart

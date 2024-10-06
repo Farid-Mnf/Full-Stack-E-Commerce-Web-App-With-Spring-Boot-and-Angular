@@ -4,11 +4,12 @@ import { AuthService } from '../service/auth.service';
 import { Router } from '@angular/router';
 import { SharedService } from '../service/shared.service';
 import { ProductService } from '../service/product.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'product-recommendations',
   standalone: true,
-  imports: [],
+  imports: [RouterLink],
   template: `
     <!-- Product Recommendations Section -->
     <div class="container my-5">
@@ -19,7 +20,7 @@ import { ProductService } from '../service/product.service';
                 <div class="card shade p-2">
                     <img [src]="'http://localhost:8080/images/' + product.imageUrl" class="card-img-top product-img" [alt]="product.name">
                     <div class="card-body">
-                        <h5 class="card-title">{{ product.name }}</h5>
+                        <h5 class="card-title clickable" [routerLink]="['/product', product.id]">{{ product.name }}</h5>
                         <p class="card-text">$<span class="fs-4">{{product.price}}</span></p>
                         <button class="btn btn-primary" (click)="addToCart(product.id, $event)">
                             <i class="fa-solid fa-plus"></i> Add to Cart
