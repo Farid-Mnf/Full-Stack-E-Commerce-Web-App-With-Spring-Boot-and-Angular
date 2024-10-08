@@ -11,6 +11,7 @@ import com.farid.backend.repository.CategoryRepository;
 import com.farid.backend.repository.ProductRepository;
 import com.farid.backend.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -108,9 +109,7 @@ public class ProductService {
                 .stream().map(this::productToProductDTO).collect(Collectors.toList());
     }
 
-    public List<ProductDTO> getFilteredProducts(FilterDTO filterDTO) {
-        System.out.println("search parameter: " + filterDTO.getSearchParameter());
-
+    public List<ProductDTO> getFilteredProducts(FilterDTO filterDTO, int pageNumber, int pageSize) {
         UUID categoryId = UUID.randomUUID();
         if(filterDTO.getCategory() != null){
             categoryId = UUID.fromString(filterDTO.getCategory());
@@ -120,18 +119,20 @@ public class ProductService {
         String searchParameter = filterDTO.getSearchParameter();
         Pageable pageable = Pageable.ofSize(4);
 
+        Pageable sizedPageable = PageRequest.of(pageNumber, pageSize);
+
         // Determine which repository method to call based on filterDTO
         if (inStock && priceRange.compareTo(BigDecimal.valueOf(3000)) != 0) {
-            return fetchProductsByCategoryPriceAndStock(categoryId, priceRange, searchParameter, pageable);
+            return fetchProductsByCategoryPriceAndStock(categoryId, priceRange, searchParameter, sizedPageable);
 
         } else if (!inStock && priceRange.compareTo(BigDecimal.valueOf(3000)) != 0) {
-            return fetchProductsByCategoryAndPrice(categoryId, priceRange, searchParameter, pageable);
+            return fetchProductsByCategoryAndPrice(categoryId, priceRange, searchParameter, sizedPageable);
 
         } else if (inStock) {
-            return fetchProductsByCategoryAndStock(categoryId, searchParameter, pageable);
+            return fetchProductsByCategoryAndStock(categoryId, searchParameter, sizedPageable);
 
         } else {
-            return fetchProductsByCategory(categoryId, searchParameter, pageable);
+            return fetchProductsByCategory(categoryId, searchParameter, sizedPageable);
         }
     }
 

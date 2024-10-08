@@ -38,8 +38,10 @@ public class ProductController {
     }
 
     @PostMapping("/filter")
-    public List<ProductDTO> getFilteredProducts(@RequestBody FilterDTO filterDTO){
-        return productService.getFilteredProducts(filterDTO);
+    public List<ProductDTO> getFilteredProducts(@RequestBody FilterDTO filterDTO,
+                                                @RequestParam(defaultValue = "0") int pageNumber,
+                                                @RequestParam(defaultValue = "4") int pageSize){
+        return productService.getFilteredProducts(filterDTO, pageNumber, pageSize);
     }
     @GetMapping("/user/{id}")
     public List<ProductDTO> getAllUserProducts(@PathVariable("id") UUID userId){
