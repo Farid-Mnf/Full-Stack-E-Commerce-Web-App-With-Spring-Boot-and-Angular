@@ -11,6 +11,7 @@ import com.farid.backend.repository.CategoryRepository;
 import com.farid.backend.repository.ProductRepository;
 import com.farid.backend.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -109,7 +110,7 @@ public class ProductService {
                 .stream().map(this::productToProductDTO).collect(Collectors.toList());
     }
 
-    public List<ProductDTO> getFilteredProducts(FilterDTO filterDTO, int pageNumber, int pageSize) {
+    public Page<ProductDTO> getFilteredProducts(FilterDTO filterDTO, int pageNumber, int pageSize) {
         UUID categoryId = UUID.randomUUID();
         if(filterDTO.getCategory() != null){
             categoryId = UUID.fromString(filterDTO.getCategory());
@@ -117,8 +118,6 @@ public class ProductService {
         BigDecimal priceRange = filterDTO.getPriceRange();
         boolean inStock = filterDTO.getInStock();
         String searchParameter = filterDTO.getSearchParameter();
-        Pageable pageable = Pageable.ofSize(4);
-
         Pageable sizedPageable = PageRequest.of(pageNumber, pageSize);
 
         // Determine which repository method to call based on filterDTO
@@ -136,32 +135,25 @@ public class ProductService {
         }
     }
 
-    private List<ProductDTO> fetchProductsByCategoryPriceAndStock(UUID categoryId, BigDecimal priceRange, String searchParameter, Pageable pageable) {
+    private Page<ProductDTO> fetchProductsByCategoryPriceAndStock(UUID categoryId, BigDecimal priceRange, String searchParameter, Pageable pageable) {
         return productRepository.findAllByCategoryIdAndPriceIsLessThanEqualAndAvailableQuantityGreaterThanOrNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(
                         categoryId, priceRange, 0, searchParameter, searchParameter, pageable
-                ).stream()
-                .map(this::productToProductDTO)
-                .toList();
+                )
+                .map(this::productToProductDTO);
     }
 
-    private List<ProductDTO> fetchProductsByCategoryAndPrice(UUID categoryId, BigDecimal priceRange, String searchParameter, Pageable pageable) {
+    private Page<ProductDTO> fetchProductsByCategoryAndPrice(UUID categoryId, BigDecimal priceRange, String searchParameter, Pageable pageable) {
         return productRepository.findAllByCategoryIdAndPriceIsLessThanEqualOrNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(categoryId, priceRange, searchParameter, searchParameter, pageable)
-                .stream()
-                .map(this::productToProductDTO)
-                .toList();
+                .map(this::productToProductDTO);
     }
 
-    private List<ProductDTO> fetchProductsByCategoryAndStock(UUID categoryId, String searchParameter, Pageable pageable) {
+    private Page<ProductDTO> fetchProductsByCategoryAndStock(UUID categoryId, String searchParameter, Pageable pageable) {
         return productRepository.findAllByCategoryIdAndAvailableQuantityGreaterThanOrNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(categoryId, 0, searchParameter, searchParameter, pageable)
-                .stream()
-                .map(this::productToProductDTO)
-                .toList();
+                .map(this::productToProductDTO);
     }
 
-    private List<ProductDTO> fetchProductsByCategory(UUID categoryId, String searchParameter, Pageable pageable) {
+    private Page<ProductDTO> fetchProductsByCategory(UUID categoryId, String searchParameter, Pageable pageable) {
         return productRepository.findAllByCategoryIdOrNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(categoryId, searchParameter, searchParameter, pageable)
-                .stream()
-                .map(this::productToProductDTO)
-                .toList();
+                .map(this::productToProductDTO);
     }
 }

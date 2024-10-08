@@ -8,6 +8,7 @@ import com.farid.backend.repository.UserRepository;
 import com.farid.backend.service.FileSaverService;
 import com.farid.backend.service.ProductService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,7 +39,7 @@ public class ProductController {
     }
 
     @PostMapping("/filter")
-    public List<ProductDTO> getFilteredProducts(@RequestBody FilterDTO filterDTO,
+    public Page<ProductDTO> getFilteredProducts(@RequestBody FilterDTO filterDTO,
                                                 @RequestParam(defaultValue = "0") int pageNumber,
                                                 @RequestParam(defaultValue = "4") int pageSize){
         return productService.getFilteredProducts(filterDTO, pageNumber, pageSize);
