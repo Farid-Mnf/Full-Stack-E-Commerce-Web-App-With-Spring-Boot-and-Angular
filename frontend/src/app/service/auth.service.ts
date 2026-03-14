@@ -18,11 +18,11 @@ export class AuthService {
   }
 
   saveToken(token: string) {
-    localStorage.setItem('token', token);
+    localStorage.setItem('ecommerce_token', token);
   }
 
   getToken(): string | null {
-    return localStorage.getItem('token');
+    return localStorage.getItem('ecommerce_token');
   }
 
   getUserDetails() {
@@ -48,7 +48,7 @@ export class AuthService {
   }
 
   logout() {
-    localStorage.removeItem('token');
+    localStorage.removeItem('ecommerce_token');
   }
 
 }

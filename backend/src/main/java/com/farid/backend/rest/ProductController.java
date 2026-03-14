@@ -41,7 +41,7 @@ public class ProductController {
     @PostMapping("/filter")
     public Page<ProductDTO> getFilteredProducts(@RequestBody FilterDTO filterDTO,
                                                 @RequestParam(defaultValue = "0") int pageNumber,
-                                                @RequestParam(defaultValue = "4") int pageSize){
+                                                @RequestParam(defaultValue = "20") int pageSize){
         return productService.getFilteredProducts(filterDTO, pageNumber, pageSize);
     }
     @GetMapping("/user/{id}")

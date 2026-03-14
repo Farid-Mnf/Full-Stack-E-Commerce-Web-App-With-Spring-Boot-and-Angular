@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { CategoryDTO } from '../model/CategoryDTO';
 import { UserService } from './user.service';
 import { ProductDTO } from '../model/ProductDTO';
@@ -39,7 +39,9 @@ export class ProductService {
   }
 
   getFilteredProducts(filterDTO: FilterDTO): Observable<ProductDTO[]> {
-    return this.http.post<ProductDTO[]>(this.productAPI + '/filter', filterDTO);
+    return this.http.post<any>(this.productAPI + '/filter', filterDTO).pipe(
+      map(response => response.content as ProductDTO[])
+    );
   }
 
 

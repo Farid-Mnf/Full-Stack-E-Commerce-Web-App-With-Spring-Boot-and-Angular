@@ -5,7 +5,7 @@ import { provideHttpClient, withInterceptorsFromDi, withFetch } from '@angular/c
 import { JwtModule } from '@auth0/angular-jwt';
 
 export function tokenGetter() {
-  return localStorage.getItem("token");
+  return localStorage.getItem("ecommerce_token");
 }
 
 export const appConfig: ApplicationConfig = {
