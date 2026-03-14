@@ -56,36 +56,43 @@ A full-stack e-commerce platform with a Spring Boot REST API backend and an Angu
 
 ## How to Run
 
-### Backend
+**Prerequisites:** Java 17+, Node.js, Docker
 
-**Prerequisites:** Java 17+, Maven, PostgreSQL
+### Quick Start
 
 ```bash
-cd backend
-
-# Configure database connection in src/main/resources/application.properties
-
-# Run the backend
-./mvnw spring-boot:run
+# Start everything (PostgreSQL, backend, frontend) with one command:
+./start.sh
 ```
 
-The API starts at `http://localhost:8080`.
-
-### Frontend
-
-**Prerequisites:** Node.js, npm
+### Manual Setup
 
 ```bash
+# 1. Start PostgreSQL
+docker compose up -d
+
+# 2. Create image upload directory (first time only)
+sudo mkdir -p /var/www/images && sudo chmod 777 /var/www/images
+
+# 3. Start backend (http://localhost:8080)
+cd backend
+./mvnw spring-boot:run
+
+# 4. Start frontend (http://localhost:4200)
 cd frontend
-
-# Install dependencies
 npm install
-
-# Start the development server
 ng serve
 ```
 
-The frontend starts at `http://localhost:4200`.
+### Stop Services
+
+```bash
+# Stop PostgreSQL
+docker compose down
+
+# Stop and wipe database
+docker compose down -v
+```
 
 ## Database ERD
 

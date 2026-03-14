@@ -29,11 +29,14 @@ public class UserService {
         return users;
     }
     public UserDTO addUser(UserDTO userDTO){
-        Address address = Address.builder()
-                .city(userDTO.getAddressDTO().getCity())
-                .country(userDTO.getAddressDTO().getCountry())
-                .streetName(userDTO.getAddressDTO().getStreetName())
-                .build();
+        Address address = null;
+        if (userDTO.getAddressDTO() != null) {
+            address = Address.builder()
+                    .city(userDTO.getAddressDTO().getCity())
+                    .country(userDTO.getAddressDTO().getCountry())
+                    .streetName(userDTO.getAddressDTO().getStreetName())
+                    .build();
+        }
         // create an empty default cart when creating the user
         Cart cart = Cart.builder().build();
 
@@ -61,6 +64,15 @@ public class UserService {
     }
 
     private UserDTO userToUserDTO(User user) {
+        AddressDTO addressDTO = null;
+        if (user.getAddress() != null) {
+            addressDTO = AddressDTO.builder()
+                    .id(user.getAddress().getId())
+                    .city(user.getAddress().getCity())
+                    .country(user.getAddress().getCountry())
+                    .streetName(user.getAddress().getStreetName())
+                    .build();
+        }
         return UserDTO.builder()
                 .phone(user.getPhone())
                 .email(user.getEmail())
@@ -68,14 +80,7 @@ public class UserService {
                 .password(user.getPassword())
                 .userImage(user.getUserImage())
                 .id(user.getId())
-                .addressDTO(
-                        AddressDTO.builder()
-                                .id(user.getAddress().getId())
-                                .city(user.getAddress().getCity())
-                                .country(user.getAddress().getCountry())
-                                .streetName(user.getAddress().getStreetName())
-                                .build()
-                )
+                .addressDTO(addressDTO)
                 .cartDTO(
                         CartDTO.builder()
                                 .id(user.getCart().getId())
