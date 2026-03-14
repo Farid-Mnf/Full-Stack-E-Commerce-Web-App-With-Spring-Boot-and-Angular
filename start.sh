@@ -29,13 +29,20 @@ if [ ! -d /var/www/images ]; then
   sudo chmod 777 /var/www/images
 fi
 
-# 3. Install frontend dependencies if needed
+# 3. Copy seed product images to the images directory
+SEED_IMAGES="$ROOT_DIR/backend/src/main/resources/seed-images"
+if [ -d "$SEED_IMAGES" ]; then
+  log "Copying seed product images to /var/www/images/..."
+  cp -n "$SEED_IMAGES"/*.jpg /var/www/images/ 2>/dev/null || true
+fi
+
+# 4. Install frontend dependencies if needed
 if [ ! -d "$ROOT_DIR/frontend/node_modules" ]; then
   log "Installing frontend dependencies..."
   (cd "$ROOT_DIR/frontend" && npm install)
 fi
 
-# 4. Start backend
+# 5. Start backend
 log "Starting backend (Spring Boot)..."
 (cd "$ROOT_DIR/backend" && ./mvnw spring-boot:run) &
 BACKEND_PID=$!
@@ -47,7 +54,7 @@ until curl -s http://localhost:8080 > /dev/null 2>&1; do
 done
 log "Backend is ready."
 
-# 5. Start frontend
+# 6. Start frontend
 log "Starting frontend (Angular)..."
 (cd "$ROOT_DIR/frontend" && npx ng serve) &
 FRONTEND_PID=$!
