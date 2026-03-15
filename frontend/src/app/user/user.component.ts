@@ -67,7 +67,7 @@ import { HeaderComponent } from "../header/header.component";
             <div class="text-center">
               <div class="mb-4">
                 @if(userDetails.userImage){
-                  <img [src]="'http://localhost:8080/images/' + userDetails.userImage" class="rounded-circle img-fluid" alt="Profile Image" style="width: 150px; height: 150px; object-fit: cover;">
+                  <img [src]="'http://localhost:8080/images/' + userDetails.userImage" (error)="onImageError($event)" class="rounded-circle img-fluid" alt="Profile Image" style="width: 150px; height: 150px; object-fit: cover;">
                 }
                 @if(!userDetails.userImage){
                   <img src="/assets/user_image.jpg" class="rounded-circle img-fluid" alt="Profile Image" style="width: 150px; height: 150px; object-fit: cover;">
@@ -105,17 +105,17 @@ import { HeaderComponent } from "../header/header.component";
                           <span><strong>Phone:</strong> {{ userDetails.phone }}</span>
                         </div>
                         <div class="col-md-6">
-                          <span><strong>Country:</strong> {{ userDetails.addressDTO.country }}</span>
+                          <span><strong>Country:</strong> {{ userDetails.addressDTO?.country }}</span>
                         </div>
                       </div>
                     </li>
                     <li class="list-group-item fs-3">
                       <div class="row p-3">
                         <div class="col-md-6">
-                          <span><strong>City:</strong> {{ userDetails.addressDTO.city }}</span>
+                          <span><strong>City:</strong> {{ userDetails.addressDTO?.city }}</span>
                         </div>
                         <div class="col-md-6">
-                          <span><strong>Street name:</strong> {{ userDetails.addressDTO.streetName }}</span>
+                          <span><strong>Street name:</strong> {{ userDetails.addressDTO?.streetName }}</span>
                         </div>
                       </div>
                     </li>
@@ -306,6 +306,10 @@ export class UserComponent {
     }
   }
 
+
+  onImageError(event: Event) {
+    (event.target as HTMLImageElement).src = '/assets/user_image.jpg';
+  }
 
   fetchUserDetails() {
     this.userService.getUser()?.subscribe(

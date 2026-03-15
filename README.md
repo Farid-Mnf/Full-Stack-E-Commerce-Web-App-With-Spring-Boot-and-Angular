@@ -2,6 +2,10 @@
 
 A full-stack e-commerce platform with a Spring Boot REST API backend and an Angular frontend.
 
+## Demo
+
+https://github.com/user-attachments/assets/demo.webm
+
 ## Tech Stack
 
 | Layer | Technology |
