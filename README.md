@@ -111,27 +111,3 @@ docker compose down -v
 ## Database ERD
 
 ![ERD Diagram](backend/ERD-Diagram.png)
-
-## Screenshots
-
-### Authentication
-
-#### Register Page
-![Register](https://github.com/Farid-Mnf/Full-Stack-E-Commerce-Web-App-With-Spring-Boot-and-Angular/assets/register-screenshot.png)
-
-#### Login Page
-![Login](https://github.com/Farid-Mnf/Full-Stack-E-Commerce-Web-App-With-Spring-Boot-and-Angular/assets/login-screenshot.png)
-
-### User Interface
-
-#### Home Page - Shop by Categories & Featured Products
-![Home Page](https://github.com/Farid-Mnf/Full-Stack-E-Commerce-Web-App-With-Spring-Boot-and-Angular/assets/home-screenshot.png)
-
-#### Shopping Cart
-![Shopping Cart](https://github.com/Farid-Mnf/Full-Stack-E-Commerce-Web-App-With-Spring-Boot-and-Angular/assets/cart-screenshot.png)
-
-#### User Profile
-![User Profile](https://github.com/Farid-Mnf/Full-Stack-E-Commerce-Web-App-With-Spring-Boot-and-Angular/assets/profile-screenshot.png)
-
-#### Seller Dashboard
-![Seller Dashboard](https://github.com/Farid-Mnf/Full-Stack-E-Commerce-Web-App-With-Spring-Boot-and-Angular/assets/seller-dashboard-screenshot.png)
