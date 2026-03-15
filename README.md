@@ -4,7 +4,17 @@ A full-stack e-commerce platform with a Spring Boot REST API backend and an Angu
 
 ## Demo
 
-https://github.com/user-attachments/assets/demo.webm
+https://github.com/user-attachments/assets/f2be4757-3a29-4e8a-9abe-9efd9d03db03
+
+<img width="1916" height="1008" alt="Image" src="https://github.com/user-attachments/assets/94b5fb85-18de-4922-8bfe-92a867ae4ade" />
+<img width="1916" height="1008" alt="Image" src="https://github.com/user-attachments/assets/a8ee2a50-7166-4220-bb08-1e65b7bcb3b0" />
+<img width="1916" height="1008" alt="Image" src="https://github.com/user-attachments/assets/2c1d8787-1a48-47b6-b9d7-5fb85ff2ca34" />
+<img width="1916" height="1008" alt="Image" src="https://github.com/user-attachments/assets/f56f43c9-ca24-4b83-900d-e18679fdcb8e" />
+<img width="1916" height="1008" alt="Image" src="https://github.com/user-attachments/assets/52ef2eeb-ba92-4796-a7fc-8059e5481223" />
+<img width="1916" height="1008" alt="Image" src="https://github.com/user-attachments/assets/4687d0fb-4df6-4320-ab19-663fcb9f8c7d" />
+<img width="1916" height="1008" alt="Image" src="https://github.com/user-attachments/assets/35234c46-47b3-42b6-8a50-4573fe10bf27" />
+
+
 
 ## Tech Stack
 
