@@ -33,11 +33,24 @@ import { SharedService } from '../service/shared.service';
         </div>
     </div>
 
+    <!-- Login toast -->
+    @if (showLoginToast) {
+      <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1080;">
+        <div class="toast show align-items-center text-bg-dark border-0 shadow-lg" role="alert">
+          <div class="d-flex">
+            <div class="toast-body">
+              <i class="fas fa-sign-in-alt me-2"></i> Please log in to add items to your cart. Redirecting...
+            </div>
+          </div>
+        </div>
+      </div>
+    }
   `,
   styleUrl: './featured-products.component.css'
 })
 export class FeaturedProductsComponent {
     isLoggedIn: boolean = false;
+    showLoginToast: boolean = false;
     featuredProducts: ProductDTO[] = [];
 
     
@@ -54,13 +67,16 @@ export class FeaturedProductsComponent {
     }
 
     addToCart(productId: string, event: MouseEvent){
-        if(!this.isLoggedIn) this.router.navigate(['/login']);
-        else{
-            this.productService.addProductToCart(productId, 1);
-            const button = event.target as HTMLButtonElement;
-            button.innerHTML = '<i class="fas fa-check-double"></i> Added to Cart';
-            this.sharedService.updateHeaderValue(true);
+        if(!this.isLoggedIn) {
+            this.showLoginToast = true;
+            setTimeout(() => this.router.navigate(['/login']), 1500);
+            return;
         }
+        this.productService.addProductToCart(productId, 1);
+        const button = event.currentTarget as HTMLButtonElement;
+        button.innerHTML = '<i class="fas fa-check-double"></i> Added to Cart';
+        button.disabled = true;
+        this.sharedService.updateHeaderValue(true);
     }
 }
 
